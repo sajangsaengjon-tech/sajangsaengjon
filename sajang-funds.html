@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>창업자금 완전 가이드 2026 — 사장님 생존연구소</title>
+
+<style>
+:root {
+  --red: #C0392B;
+  --red-soft: #FDECEA;
+  --red-mid: #d44235;
+  --dark: #111;
+  --mid: #444;
+  --gray: #888;
+  --border: #E8E8E8;
+  --bg: #F8F7F5;
+  --white: #fff;
+  --blue: #2C3E6B;
+  --blue-soft: #EBF0FF;
+  --green: #1a6e3c;
+  --green-soft: #E6F4ED;
+  --gold: #9B6F1A;
+  --gold-soft: #FEF6E4;
+  --purple: #5B2D8E;
+  --purple-soft: #F0E8FF;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 clamp(16px,5vw,60px);
+  justify-content: space-between;
+}
+.nav-brand {
+  font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--dark);
+}
+.nav-brand em { color: var(--red); font-style:normal; }
+.nav-cta {
+  background: #FEE500; color: #391B1B;
+  padding: 7px 16px; border-radius: 6px;
+  font-size: 12px; font-weight: 700;
+  text-decoration: none; font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+}
+
+/* HERO */
+.hero {
+  padding: 100px clamp(16px,5vw,60px) 72px;
+  text-align: center;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap:6px;
+  background: var(--red-soft); color: var(--red);
+  font-size: 12px; font-weight: 700; padding: 5px 14px;
+  border-radius: 100px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  font-size: clamp(26px,5vw,48px); font-weight: 900;
+  line-height: 1.25; margin-bottom: 16px; color: var(--dark);
+  letter-spacing: -1px;
+}
+.hero h1 span { color: var(--red); }
+.hero-sub {
+  font-size: clamp(14px,2.5vw,17px); color: var(--mid);
+  margin-bottom: 40px; max-width: 540px; margin-left: auto; margin-right: auto;
+}
+
+/* 로드맵 섹션 */
+.roadmap-section {
+  padding: 72px clamp(16px,5vw,60px);
+  max-width: 960px; margin: 0 auto;
+}
+.sec-eyebrow {
+  font-size: 11px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color: var(--red);
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.sec-eyebrow::before { content:''; width:18px; height:2px; background:var(--red); border-radius:1px; }
+.sec-title {
+  font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  font-size: clamp(22px,4vw,34px); font-weight:700;
+  margin-bottom: 10px; line-height:1.3;
+}
+.sec-sub { font-size:14px; color:var(--gray); margin-bottom:40px; }
+
+/* 로드맵 스텝 */
+.roadmap {
+  display: flex; flex-direction: column; gap: 0;
+  position: relative;
+}
+.roadmap::before {
+  content:''; position:absolute;
+  left: 31px; top:48px; bottom:48px;
+  width: 2px; background: linear-gradient(to bottom, var(--red), var(--gold), var(--green), var(--blue));
+  border-radius:1px;
+}
+@media(max-width:600px) { .roadmap::before { left:23px; } }
+
+.rm-step {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 0 0 32px;
+  position: relative;
+}
+.rm-dot {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0; z-index:1;
+  border: 3px solid white;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+}
+@media(max-width:600px) { .rm-dot { width:48px; height:48px; font-size:18px; } }
+
+.rm-content { flex:1; padding-top:8px; }
+.rm-tag {
+  display: inline-block; font-size:11px; font-weight:700;
+  padding: 3px 10px; border-radius:4px; margin-bottom:8px;
+  letter-spacing:.5px;
+}
+.rm-title {
+  font-size: clamp(16px,3vw,20px); font-weight:700;
+  margin-bottom:6px; color:var(--dark);
+}
+.rm-amount {
+  font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+  font-size: clamp(22px,4vw,32px); font-weight:700;
+  margin-bottom:10px; line-height:1;
+}
+.rm-desc { font-size:13px; color:var(--mid); margin-bottom:14px; line-height:1.75; }
+.rm-cards {
+  display: flex; flex-wrap:wrap; gap:8px;
+}
+.rm-card {
+  background: var(--white); border:1px solid var(--border);
+  border-radius:8px; padding: 10px 14px;
+  font-size:12px; min-width:140px;
+}
+.rm-card strong { display:block; font-size:13px; font-weight:700; margin-bottom:2px; }
+.rm-card span { color: var(--gray); }
+
+/* 색상별 */
+.step-1 .rm-dot { background: var(--red-soft); }
+.step-1 .rm-tag { background: var(--red-soft); color: var(--red); }
+.step-1 .rm-amount { color: var(--red); }
+.step-2 .rm-dot { background: var(--gold-soft); }
+.step-2 .rm-tag { background: var(--gold-soft); color: var(--gold); }
+.step-2 .rm-amount { color: var(--gold); }
+.step-3 .rm-dot { background: var(--green-soft); }
+.step-3 .rm-tag { background: var(--green-soft); color: var(--green); }
+.step-3 .rm-amount { color: var(--green); }
+.step-4 .rm-dot { background: var(--blue-soft); }
+.step-4 .rm-tag { background: var(--blue-soft); color: var(--blue); }
+.step-4 .rm-amount { color: var(--blue); }
+.step-5 .rm-dot { background: var(--purple-soft); }
+.step-5 .rm-tag { background: var(--purple-soft); color: var(--purple); }
+.step-5 .rm-amount { color: var(--purple); }
+
+/* 청년여성 섹션 */
+.special-section {
+  background: var(--dark);
+  padding: 72px clamp(16px,5vw,60px);
+}
+.special-inner { max-width:960px; margin:0 auto; }
+.special-section .sec-eyebrow { color: #e87770; }
+.special-section .sec-eyebrow::before { background:#e87770; }
+.special-section .sec-title { color: white; }
+.special-section .sec-sub { color: #aaa; }
+
+.special-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:16px;
+}
+.special-card {
+  background: #1e1e22; border:1px solid #333;
+  border-radius:14px; padding:24px 20px;
+  border-top: 3px solid var(--red);
+}
+.sp-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background: var(--red-soft); color:var(--red);
+  font-size:11px; font-weight:700; padding:3px 10px;
+  border-radius:4px; margin-bottom:12px;
+}
+.special-card h3 { font-size:16px; font-weight:700; color:white; margin-bottom:8px; }
+.special-card .amount {
+  font-family:'Noto Serif KR',serif;
+  font-size:26px; font-weight:700; color:var(--red); margin-bottom:10px;
+}
+.special-card ul { list-style:none; }
+.special-card ul li {
+  font-size:13px; color:#bbb; padding:4px 0;
+  border-bottom:1px solid #2a2a2a; line-height:1.6;
+}
+.special-card ul li:last-child { border-bottom:none; }
+.special-card ul li::before { content:'→ '; color:var(--red); }
+
+/* 전체 리스트 섹션 */
+.list-section {
+  padding: 72px clamp(16px,5vw,60px);
+  max-width:960px; margin:0 auto;
+}
+.filter-tabs {
+  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px;
+}
+.tab {
+  padding:8px 18px; border-radius:100px;
+  border:1.5px solid var(--border); background:var(--white);
+  font-size:13px; font-weight:500; cursor:pointer;
+  transition:all .2s; color:var(--mid);
+  font-family:'Noto Sans KR',sans-serif;
+}
+.tab.active, .tab:hover { border-color:var(--red); color:var(--red); background:var(--red-soft); }
+
+.fund-list { display:flex; flex-direction:column; gap:12px; }
+.fund-row {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:12px; padding:20px 22px;
+  display:grid; grid-template-columns:auto 1fr auto;
+  gap:16px; align-items:center;
+  transition: box-shadow .2s;
+}
+.fund-row:hover { box-shadow:0 4px 20px rgba(0,0,0,.08); }
+.fund-row[data-hidden="true"] { display:none; }
+
+.fund-org {
+  font-size:11px; font-weight:700; letter-spacing:.5px;
+  padding:4px 10px; border-radius:4px; text-align:center;
+  white-space:nowrap;
+}
+.org-sijin { background:var(--red-soft); color:var(--red); }
+.org-jungjin { background:var(--blue-soft); color:var(--blue); }
+.org-changjin { background:var(--gold-soft); color:var(--gold); }
+.org-sinbo { background:var(--green-soft); color:var(--green); }
+.org-gibo { background:var(--purple-soft); color:var(--purple); }
+.org-jiyeok { background:#F0F0F0; color:#555; }
+
+.fund-info strong { display:block; font-size:15px; font-weight:700; margin-bottom:4px; }
+.fund-info .tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.fund-tag {
+  font-size:11px; padding:2px 8px; border-radius:3px;
+  background:var(--bg); color:var(--gray); border:1px solid var(--border);
+}
+.fund-tag.youth { background:var(--gold-soft); color:var(--gold); border-color:#f0d58c; }
+.fund-tag.women { background:var(--purple-soft); color:var(--purple); border-color:#c9a0ea; }
+.fund-tag.new { background:var(--red-soft); color:var(--red); border-color:#f5c6c4; }
+
+.fund-amount {
+  font-family:'Noto Serif KR',serif;
+  font-size:18px; font-weight:700; color:var(--dark);
+  text-align:right; white-space:nowrap;
+}
+.fund-amount span { display:block; font-family:'Noto Sans KR',sans-serif; font-size:11px; color:var(--gray); font-weight:400; margin-top:2px; }
+
+@media(max-width:560px) {
+  .fund-row { grid-template-columns:1fr; gap:10px; }
+  .fund-amount { text-align:left; }
+}
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, var(--red) 0%, #a02020 100%);
+  padding: 80px clamp(16px,5vw,60px);
+  text-align:center;
+}
+.cta-section h2 {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(22px,4vw,36px); font-weight:700;
+  color:white; margin-bottom:12px; line-height:1.3;
+}
+.cta-section p { color:rgba(255,255,255,.75); font-size:15px; margin-bottom:36px; }
+.btn-kakao {
+  display:inline-flex; align-items:center; gap:8px;
+  background:#FEE500; color:#391B1B;
+  padding:16px 44px; border-radius:10px;
+  font-size:16px; font-weight:700;
+  text-decoration:none; font-family:'Noto Sans KR',sans-serif;
+  box-shadow:0 4px 24px rgba(0,0,0,.2);
+  transition:all .2s;
+}
+.btn-kakao:hover { transform:translateY(-2px); }
+.cta-note { margin-top:14px; font-size:12px; color:rgba(255,255,255,.45); }
+
+footer {
+  background:var(--dark); padding:40px clamp(16px,5vw,60px);
+  text-align:center;
+}
+footer .logo {
+  font-family:'Noto Serif KR',serif; font-size:18px;
+  font-weight:700; color:white; margin-bottom:6px;
+}
+footer .logo em { color:var(--red); font-style:normal; }
+footer p { font-size:12px; color:#555; }
+
+.rv { opacity:1; transform:translateY(0); transition:opacity .6s ease, transform .6s ease; }
+.rv.on { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">사장님 <em>생존</em>연구소</div>
+  <a href="#cta" class="nav-cta">💬 무료 상담</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">📋 2026년 최신 기준</div>
+  <h1>창업하면<br><span>얼마를 받을 수 있을까요?</span></h1>
+  <p class="hero-sub">예비창업부터 성장 단계까지<br>단계별로 받을 수 있는 모든 창업 자금을 정리했어요</p>
+</section>
+
+<!-- 로드맵 -->
+<section class="roadmap-section">
+  <div class="sec-eyebrow rv">창업 단계별 로드맵</div>
+  <h2 class="sec-title rv">아이디어 하나로<br>최대 20억까지 가능해요</h2>
+  <p class="sec-sub rv">단계별로 쌓아가면 누적 수령액이 달라져요</p>
+
+  <div class="roadmap rv">
+
+    <div class="rm-step step-1">
+      <div class="rm-dot">🌱</div>
+      <div class="rm-content">
+        <span class="rm-tag">STEP 1 · 예비창업</span>
+        <div class="rm-title">사업자 없어도 받을 수 있어요</div>
+        <div class="rm-amount">최대 7,000만원</div>
+        <div class="rm-desc">아직 사업자 등록 전이어도 아이디어와 의지만 있으면 신청 가능해요.<br>청년·여성은 우대 가점이 있어서 합격률이 더 높아요.</div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <strong>예비창업패키지</strong>
+            <span>창진원 / 최대 7,000만원</span>
+          </div>
+          <div class="rm-card">
+            <strong>청년창업사관학교</strong>
+            <span>중진공 / 최대 1억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>여성창업경진대회</strong>
+            <span>창진원 / 최대 3,000만원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step step-2">
+      <div class="rm-dot">🚀</div>
+      <div class="rm-content">
+        <span class="rm-tag">STEP 2 · 초기창업 (3년 미만)</span>
+        <div class="rm-title">사업자 등록 후 본격 시작</div>
+        <div class="rm-amount">최대 1억원</div>
+        <div class="rm-desc">창업 3년 이내 사업자를 대상으로 하는 자금이 가장 많아요.<br>이 시기에 자금을 잘 받아두면 이후 성장이 훨씬 빨라요.</div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <strong>초기창업패키지</strong>
+            <span>창진원 / 최대 1억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>소진공 창업자금</strong>
+            <span>소진공 / 최대 7,000만원</span>
+          </div>
+          <div class="rm-card">
+            <strong>중진공 창업자금</strong>
+            <span>중진공 / 최대 1억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>지역신보 소액창업</strong>
+            <span>지역신보 / 최대 5,000만원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step step-3">
+      <div class="rm-dot">📈</div>
+      <div class="rm-content">
+        <span class="rm-tag">STEP 3 · 성장 (3~7년)</span>
+        <div class="rm-title">매출이 생기면 더 큰 자금으로</div>
+        <div class="rm-amount">최대 2억원</div>
+        <div class="rm-desc">어느 정도 매출과 사업 실적이 생기면 더 큰 규모의 자금에 도전할 수 있어요.<br>R&D 자금은 기술 없어도 신청 가능한 상품이 있어요.</div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <strong>디딤돌 R&D</strong>
+            <span>중기부 / 최대 2억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>소진공 성장촉진자금</strong>
+            <span>소진공 / 최대 1억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>신보 보증부 대출</strong>
+            <span>신보 / 최대 3억원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step step-4">
+      <div class="rm-dot">🏆</div>
+      <div class="rm-content">
+        <span class="rm-tag">STEP 4 · 도약 (7년 이상)</span>
+        <div class="rm-title">검증된 사업에는 더 큰 자금이</div>
+        <div class="rm-amount">최대 5억원</div>
+        <div class="rm-desc">사업 실적과 기술력이 쌓이면 TIPS 같은 대형 프로그램에 도전할 수 있어요.<br>이 단계부터는 투자와 자금이 병행돼요.</div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <strong>TIPS 프로그램</strong>
+            <span>중기부 / 최대 5억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>기보 벤처보증</strong>
+            <span>기보 / 최대 5억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>중진공 시설자금</strong>
+            <span>중진공 / 최대 2억원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step step-5">
+      <div class="rm-dot">💎</div>
+      <div class="rm-content">
+        <span class="rm-tag">STEP 5 · 스케일업</span>
+        <div class="rm-title">글로벌 확장까지 지원받을 수 있어요</div>
+        <div class="rm-amount">최대 15억원+</div>
+        <div class="rm-desc">DipTech, 글로벌 진출 지원 등 사업 규모가 커지면 더 큰 프로그램이 열려요.</div>
+        <div class="rm-cards">
+          <div class="rm-card">
+            <strong>DipTech</strong>
+            <span>중기부 / 최대 15억원</span>
+          </div>
+          <div class="rm-card">
+            <strong>글로벌 창업지원</strong>
+            <span>창진원 / 최대 5억원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 청년·여성 특화 -->
+<section class="special-section">
+  <div class="special-inner">
+    <div class="sec-eyebrow">청년 · 여성 창업자 특화</div>
+    <h2 class="sec-title rv" style="color:white;">청년·여성이라면<br>추가 혜택이 있어요</h2>
+    <p class="sec-sub rv">같은 자금도 청년·여성은 우대 가점과 별도 상품이 있어요</p>
+    <div class="special-grid rv">
+      <div class="special-card">
+        <span class="sp-badge">🎯 청년 전용</span>
+        <h3>청년창업사관학교</h3>
+        <div class="amount">최대 1억원</div>
+        <ul>
+          <li>만 39세 이하 예비·초기 창업자</li>
+          <li>교육 + 자금 + 공간 패키지 제공</li>
+          <li>전국 17개 캠퍼스 운영</li>
+          <li>졸업 후 후속 지원 연계</li>
+        </ul>
+      </div>
+      <div class="special-card">
+        <span class="sp-badge">🌸 여성 전용</span>
+        <h3>여성기업 창업자금</h3>
+        <div class="amount">최대 7,000만원</div>
+        <ul>
+          <li>여성기업 확인서 발급 시 우대</li>
+          <li>소진공·중진공 금리 우대 적용</li>
+          <li>여성창업경진대회 별도 운영</li>
+          <li>보육·육아 관련 업종 추가 가점</li>
+        </ul>
+      </div>
+      <div class="special-card">
+        <span class="sp-badge">✨ 청년·여성 공통</span>
+        <h3>예비창업패키지 우대</h3>
+        <div class="amount">최대 7,000만원</div>
+        <ul>
+          <li>청년·여성 트랙 별도 운영</li>
+          <li>일반 대비 경쟁률 낮음</li>
+          <li>사업자 없어도 신청 가능</li>
+          <li>멘토링·교육 무료 연계</li>
+        </ul>
+      </div>
+      <div class="special-card">
+        <span class="sp-badge">💡 공통 혜택</span>
+        <h3>고용지원금 추가 수령</h3>
+        <div class="amount">연 최대 720만원</div>
+        <ul>
+          <li>청년 채용 시 월 60만원 × 12개월</li>
+          <li>두루누리 보험료 80% 지원</li>
+          <li>자금 + 지원금 동시 수령 가능</li>
+          <li>창업자금과 중복 수령 검토 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 전체 리스트 -->
+<section class="list-section">
+  <div class="sec-eyebrow rv">전체 자금 리스트</div>
+  <h2 class="sec-title rv">2026년 신청 가능한<br>창업 관련 자금 전체보기</h2>
+  <p class="sec-sub rv">기관별로 필터해서 확인하세요</p>
+
+  <div class="filter-tabs rv">
+    <button class="tab active" onclick="filterFunds('all',this)">전체</button>
+    <button class="tab" onclick="filterFunds('changjin',this)">창진원</button>
+    <button class="tab" onclick="filterFunds('jungjin',this)">중진공</button>
+    <button class="tab" onclick="filterFunds('sijin',this)">소진공</button>
+    <button class="tab" onclick="filterFunds('sinbo',this)">신보</button>
+    <button class="tab" onclick="filterFunds('gibo',this)">기보</button>
+    <button class="tab" onclick="filterFunds('jiyeok',this)">지역신보</button>
+    <button class="tab" onclick="filterFunds('youth',this)">청년 우대</button>
+    <button class="tab" onclick="filterFunds('women',this)">여성 우대</button>
+  </div>
+
+  <div class="fund-list rv" id="fundList">
+
+    <div class="fund-row" data-org="changjin" data-tag="youth women new">
+      <span class="fund-org org-changjin">창진원</span>
+      <div class="fund-info">
+        <strong>예비창업패키지</strong>
+        <div>사업자 등록 전 신청 가능 / 아이디어 기반 / 교육·멘토링 포함</div>
+        <div class="tags">
+          <span class="fund-tag new">예비창업</span>
+          <span class="fund-tag youth">청년 우대</span>
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">7,000만원<span>비경쟁 지원금</span></div>
+    </div>
+
+    <div class="fund-row" data-org="changjin" data-tag="new youth women">
+      <span class="fund-org org-changjin">창진원</span>
+      <div class="fund-info">
+        <strong>초기창업패키지</strong>
+        <div>창업 3년 이내 / 시장 검증 단계 / 사업화 자금 지원</div>
+        <div class="tags">
+          <span class="fund-tag new">3년 미만</span>
+          <span class="fund-tag youth">청년 우대</span>
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">1억원<span>비경쟁 지원금</span></div>
+    </div>
+
+    <div class="fund-row" data-org="jungjin" data-tag="youth">
+      <span class="fund-org org-jungjin">중진공</span>
+      <div class="fund-info">
+        <strong>청년창업사관학교</strong>
+        <div>만 39세 이하 / 교육+자금+공간 패키지 / 전국 17개 캠퍼스</div>
+        <div class="tags">
+          <span class="fund-tag youth">청년 전용</span>
+          <span class="fund-tag new">예비~초기</span>
+        </div>
+      </div>
+      <div class="fund-amount">1억원<span>비경쟁 지원금</span></div>
+    </div>
+
+    <div class="fund-row" data-org="sijin" data-tag="new youth women">
+      <span class="fund-org org-sijin">소진공</span>
+      <div class="fund-info">
+        <strong>창업자 특별자금</strong>
+        <div>창업 1년 미만 전용 / 운전자금·시설자금 / 소상공인 규모</div>
+        <div class="tags">
+          <span class="fund-tag new">1년 미만</span>
+          <span class="fund-tag youth">청년 우대</span>
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">7,000만원<span>정책금리 대출</span></div>
+    </div>
+
+    <div class="fund-row" data-org="jungjin" data-tag="new youth">
+      <span class="fund-org org-jungjin">중진공</span>
+      <div class="fund-info">
+        <strong>중소기업 창업자금</strong>
+        <div>창업 7년 이내 / 시설+운전자금 / 사업계획서 심사</div>
+        <div class="tags">
+          <span class="fund-tag new">7년 미만</span>
+          <span class="fund-tag youth">청년 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">1억원+<span>정책금리 대출</span></div>
+    </div>
+
+    <div class="fund-row" data-org="sinbo" data-tag="new youth women">
+      <span class="fund-org org-sinbo">신보</span>
+      <div class="fund-info">
+        <strong>창업기업 우대보증</strong>
+        <div>담보 없이 은행 대출 연계 / 창업자 우대 보증료율 / 빠른 심사</div>
+        <div class="tags">
+          <span class="fund-tag new">초기창업</span>
+          <span class="fund-tag youth">청년 우대</span>
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">3억원<span>보증부 대출</span></div>
+    </div>
+
+    <div class="fund-row" data-org="gibo" data-tag="new youth">
+      <span class="fund-org org-gibo">기보</span>
+      <div class="fund-info">
+        <strong>창업기업 기술보증</strong>
+        <div>기술·아이디어 기반 / 특허 보유 시 우대 / 신보 대안</div>
+        <div class="tags">
+          <span class="fund-tag new">초기창업</span>
+          <span class="fund-tag youth">청년 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">5억원<span>보증부 대출</span></div>
+    </div>
+
+    <div class="fund-row" data-org="jiyeok" data-tag="new youth women">
+      <span class="fund-org org-jiyeok">지역신보</span>
+      <div class="fund-info">
+        <strong>소액 창업보증</strong>
+        <div>지역 소상공인 우선 / 빠른 심사 / 소액 필요 시 유리</div>
+        <div class="tags">
+          <span class="fund-tag new">초기창업</span>
+          <span class="fund-tag youth">청년 우대</span>
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">5,000만원<span>보증부 대출</span></div>
+    </div>
+
+    <div class="fund-row" data-org="changjin" data-tag="women">
+      <span class="fund-org org-changjin">창진원</span>
+      <div class="fund-info">
+        <strong>여성창업경진대회</strong>
+        <div>여성 창업자 전용 / 경진대회 형식 / 우수 팀 사업화 자금</div>
+        <div class="tags">
+          <span class="fund-tag women">여성 전용</span>
+        </div>
+      </div>
+      <div class="fund-amount">3,000만원<span>비경쟁 지원금</span></div>
+    </div>
+
+    <div class="fund-row" data-org="sijin" data-tag="women">
+      <span class="fund-org org-sijin">소진공</span>
+      <div class="fund-info">
+        <strong>여성기업 우대자금</strong>
+        <div>여성기업 확인서 보유 시 / 금리 우대 적용 / 시설+운전자금</div>
+        <div class="tags">
+          <span class="fund-tag women">여성 우대</span>
+        </div>
+      </div>
+      <div class="fund-amount">7,000만원<span>금리 우대 대출</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <h2>내가 받을 수 있는 자금<br>정확하게 확인해 드릴게요</h2>
+  <p>위 자금 중 어떤 게 내 상황에 맞는지<br>무료 상담으로 확인해보세요. 성공보수 없어요.</p>
+  <a href="http://pf.kakao.com/_BwKMX" target="_blank" class="btn-kakao">
+    💬 카카오톡 무료 상담 신청
+  </a>
+  <p class="cta-note">* 상담은 무료이며 강요나 부담은 없습니다</p>
+</section>
+
+<footer>
+  <div class="logo">사장님 <em>생존</em>연구소</div>
+  <p>소상공인협회 정책·마케팅 자문위원 역임 | 정책자금 전문가 10년 | 성공보수 없음</p>
+  <p style="margin-top:16px; color:#555; font-size:12px;">상호명: 사장님 생존연구소 | 운영사: 소생컴퍼니</p>
+  <p style="color:#555; font-size:12px;">사업자등록번호: 776-12-03242</p>
+  <p style="color:#555; font-size:12px;">이메일: sajangsaengjon@gmail.com</p>
+  <p style="margin-top:8px; color:#333; font-size:12px;">© 2026 사장님 생존연구소. All rights reserved.</p>
+</footer>
+
+<script>
+// 필터
+function filterFunds(type, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.fund-row').forEach(row => {
+    if (type === 'all') {
+      row.removeAttribute('data-hidden');
+    } else if (type === 'youth' || type === 'women') {
+      const tags = row.getAttribute('data-tag') || '';
+      row.setAttribute('data-hidden', tags.includes(type) ? 'false' : 'true');
+    } else {
+      const org = row.getAttribute('data-org') || '';
+      row.setAttribute('data-hidden', org === type ? 'false' : 'true');
+    }
+  });
+}
+
+// 스크롤 리빌
+const rv = document.querySelectorAll('.rv');
+const obs = new IntersectionObserver(es => {
+  es.forEach((e,i) => {
+    if(e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i*80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold:0.08 });
+rv.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>
