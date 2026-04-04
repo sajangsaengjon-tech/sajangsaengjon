@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사장님 생존연구소 | 소상공인 정책자금·마케팅·지원금 전문</title>
+<style>
+:root{--red:#C0392B;--red-soft:#FDECEA;--dark:#111827;--mid:#374151;--gray:#6B7280;--border:#E5E7EB;--bg:#F9FAFB;--white:#FFFFFF;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'맑은 고딕','Apple SD Gothic Neo',sans-serif;color:var(--dark);background:var(--white);line-height:1.7;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 clamp(16px,5vw,80px);justify-content:space-between;}
+.nav-logo{font-size:17px;font-weight:700;color:var(--dark);}
+.nav-logo em{color:var(--red);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{font-size:13px;color:var(--gray);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--red);}
+.nav-cta{background:#FEE500;color:#391B1B;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;}
+@media(max-width:640px){.nav-links{display:none;}}
+.hero{padding:100px clamp(16px,5vw,80px) 80px;text-align:center;background:linear-gradient(160deg,#fff 0%,#fff8f7 60%,#fff 100%);border-bottom:1px solid var(--border);}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--red-soft);color:var(--red);font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:20px;}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.2;letter-spacing:-1.5px;margin-bottom:16px;}
+.hero h1 span{color:var(--red);}
+.hero-sub{font-size:clamp(15px,2.5vw,18px);color:var(--mid);margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-bottom:40px;flex-wrap:wrap;}
+.stat-num{font-size:32px;font-weight:900;color:var(--red);display:block;line-height:1;}
+.stat-label{font-size:12px;color:var(--gray);margin-top:4px;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--red);color:#fff;padding:15px 36px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(192,57,43,.3);}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-kakao{background:#FEE500;color:#391B1B;padding:15px 36px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
+.btn-kakao:hover{transform:translateY(-1px);}
+.section{padding:80px clamp(16px,5vw,80px);}
+.section-inner{max-width:960px;margin:0 auto;}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.sec-title{font-size:clamp(22px,4vw,36px);font-weight:900;letter-spacing:-1px;margin-bottom:12px;line-height:1.3;}
+.sec-sub{font-size:15px;color:var(--gray);max-width:540px;line-height:1.8;}
+.why-bg{background:var(--bg);}
+.why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:48px;}
+@media(max-width:480px){.why-grid{grid-template-columns:1fr;}}
+.why-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;transition:box-shadow .2s,transform .2s;position:relative;overflow:hidden;}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
+.why-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);transform:translateY(-3px);}
+.why-icon{font-size:36px;margin-bottom:14px;}
+.why-card h3{font-size:15px;font-weight:700;margin-bottom:8px;}
+.why-card p{font-size:13px;color:var(--gray);line-height:1.75;}
+.service-steps{display:flex;flex-direction:column;gap:0;margin-top:48px;}
+.step-wrap{display:grid;grid-template-columns:80px 1fr;gap:24px;padding:32px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.step-wrap:last-child{border-bottom:none;}
+.step-num-wrap{text-align:center;}
+.step-circle{width:56px;height:56px;border-radius:50%;background:var(--red-soft);border:2px solid rgba(192,57,43,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--red);margin:0 auto 6px;}
+.step-tag{font-size:10px;font-weight:700;color:var(--red);letter-spacing:1px;}
+.step-body h3{font-size:18px;font-weight:700;margin-bottom:6px;}
+.price{display:inline-block;font-size:13px;font-weight:700;padding:3px 12px;border-radius:100px;margin-bottom:10px;}
+.price-free{background:var(--red-soft);color:var(--red);}
+.price-paid{background:#1a1a2e;color:#fff;}
+.step-body p{font-size:14px;color:var(--mid);line-height:1.8;margin-bottom:12px;}
+.step-features{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.step-features li{font-size:13px;color:var(--mid);display:flex;align-items:flex-start;gap:8px;}
+.step-features li::before{content:'✓';color:var(--red);font-weight:700;flex-shrink:0;margin-top:1px;}
+.highlight-msg{margin-top:14px;font-size:13px;color:var(--red);font-weight:600;background:var(--red-soft);padding:10px 14px;border-radius:8px;}
+.doc-slider-wrap{background:var(--bg);}
+.doc-slider{display:flex;gap:16px;overflow-x:auto;padding:24px 0 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.doc-slider::-webkit-scrollbar{height:4px;}
+.doc-slider::-webkit-scrollbar-track{background:#eee;border-radius:2px;}
+.doc-slider::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+.doc-card{flex-shrink:0;width:272px;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;scroll-snap-align:start;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.doc-card-header{background:var(--red);padding:14px 16px;}
+.doc-card-header h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;}
+.doc-card-header span{font-size:11px;color:rgba(255,255,255,.7);}
+.doc-card-body{padding:16px;}
+.doc-section{margin-bottom:12px;}
+.doc-section-title{font-size:10px;font-weight:700;color:var(--red);letter-spacing:1px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;}
+.doc-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;}
+.doc-row span:first-child{font-size:11px;color:var(--gray);}
+.doc-row span:last-child{font-size:11px;font-weight:600;color:var(--dark);}
+.doc-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:3px;margin:2px 2px 2px 0;}
+.tag-green{background:#d1fae5;color:#065f46;}
+.tag-red{background:var(--red-soft);color:var(--red);}
+.tag-blue{background:#dbeafe;color:#1e40af;}
+.doc-highlight{background:var(--red-soft);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--red);font-weight:600;margin-top:8px;line-height:1.6;}
+.review-slider{display:flex;gap:16px;overflow-x:auto;padding:24px 0 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.review-slider::-webkit-scrollbar{height:4px;}
+.review-slider::-webkit-scrollbar-track{background:#eee;border-radius:2px;}
+.review-slider::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+.review-card{flex-shrink:0;width:300px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px 20px;scroll-snap-align:start;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.review-stars{color:#FBBF24;font-size:14px;margin-bottom:12px;}
+.review-text{font-size:14px;color:var(--mid);line-height:1.8;margin-bottom:16px;}
+.review-author{display:flex;align-items:center;gap:10px;}
+.review-avatar{width:36px;height:36px;border-radius:50%;background:var(--red-soft);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--red);flex-shrink:0;}
+.review-info strong{display:block;font-size:13px;font-weight:700;}
+.review-info span{font-size:11px;color:var(--gray);}
+.form-section{background:var(--dark);}
+.form-section .sec-label{color:#e87770;}
+.form-section .sec-title{color:#fff;}
+.form-section .sec-sub{color:#9ca3af;}
+.form-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:flex-start;margin-top:48px;}
+@media(max-width:760px){.form-inner{grid-template-columns:1fr;}}
+.form-left p{font-size:14px;color:#9ca3af;line-height:1.9;margin-bottom:20px;}
+.form-promise{display:flex;flex-direction:column;gap:10px;}
+.promise-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#d1d5db;}
+.promise-item::before{content:'✓';color:var(--red);font-weight:700;font-size:14px;}
+.form-right{background:#1f2937;border-radius:16px;padding:32px 28px;}
+.form-right h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;}
+.form-sub{font-size:13px;color:#9ca3af;margin-bottom:24px;}
+.google-form-btn{display:block;background:var(--red);color:#fff;padding:16px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:16px;font-weight:700;transition:all .2s;box-shadow:0 4px 20px rgba(192,57,43,.4);}
+.google-form-btn:hover{transform:translateY(-2px);}
+.form-or{text-align:center;color:#4b5563;font-size:13px;margin:16px 0;}
+.kakao-big{display:block;background:#FEE500;color:#391B1B;padding:14px 24px;border-radius:10px;text-align:center;text-decoration:none;font-size:15px;font-weight:700;transition:all .2s;}
+.kakao-big:hover{transform:translateY(-1px);}
+.form-note{text-align:center;font-size:11px;color:#4b5563;margin-top:14px;}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;}
+@media(max-width:600px){.process-grid{grid-template-columns:1fr 1fr;gap:16px;}}
+.p-step{text-align:center;padding:0 12px;position:relative;}
+.p-step:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:28px;font-size:18px;color:var(--border);}
+@media(max-width:600px){.p-step:not(:last-child)::after{display:none;}}
+.p-circle{width:60px;height:60px;border-radius:50%;background:var(--red-soft);border:2px solid rgba(192,57,43,.2);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;}
+.p-badge{font-size:10px;font-weight:700;color:var(--red);letter-spacing:1px;margin-bottom:8px;display:block;}
+.p-step h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+.p-step p{font-size:12px;color:var(--gray);line-height:1.6;}
+footer{background:var(--dark);padding:48px clamp(16px,5vw,80px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:32px;}
+.foot-logo{font-size:20px;font-weight:700;color:#fff;margin-bottom:8px;}
+.foot-logo em{color:var(--red);font-style:normal;}
+.foot-info p{font-size:12px;color:#6b7280;line-height:2;}
+.foot-links{display:flex;flex-direction:column;gap:8px;}
+.foot-links a{font-size:13px;color:#6b7280;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
+.foot-links a:hover{color:#fff;}
+.foot-copy{width:100%;font-size:12px;color:#374151;padding-top:24px;border-top:1px solid #1f2937;}
+.scroll-hint{text-align:center;font-size:12px;color:var(--gray);margin-top:8px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">사장님 <em>생존</em>연구소</div>
+  <div class="nav-links">
+    <a href="#service">서비스</a>
+    <a href="#report">자금계획서</a>
+    <a href="#reviews">후기</a>
+    <a href="#contact">상담 신청</a>
+  </div>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeBpS_RHvqYGitgyRSFgHmIf-ylVNlfWOCnolexO5xeQrMiLA/viewform" target="_blank" class="nav-cta">📋 무료 상담</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🔴 소상공인협회 정책·마케팅 자문위원 역임</div>
+  <h1>사장님, 받을 수 있는 돈이<br><span>생각보다 훨씬 많습니다</span></h1>
+  <p class="hero-sub">정책자금·마케팅·지원금, 10년 경력 전문가가<br>사장님 상황에 맞게 직접 짚어드립니다</p>
+  <div class="hero-stats">
+    <div><span class="stat-num">10년+</span><span class="stat-label">정책자금 현장 경력</span></div>
+    <div><span class="stat-num">0원</span><span class="stat-label">초기 상담 비용</span></div>
+    <div><span class="stat-num">0%</span><span class="stat-label">성공보수</span></div>
+  </div>
+  <div class="hero-btns">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeBpS_RHvqYGitgyRSFgHmIf-ylVNlfWOCnolexO5xeQrMiLA/viewform" target="_blank" class="btn-primary">📋 무료 상담 신청하기</a>
+  </div>
+</section>
+
+<section class="section why-bg">
+  <div class="section-inner">
+    <div class="sec-label">왜 사장님 생존연구소인가</div>
+    <h2 class="sec-title">다른 곳과 이렇게 다릅니다</h2>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">🚫</div><h3>성공보수 없음</h3><p>자금 승인 여부와 무관하게 추가 비용이 없습니다. 처음부터 투명하게 안내합니다</p></div>
+      <div class="why-card"><div class="why-icon">🎯</div><h3>자금 + 마케팅 동시</h3><p>정책자금만 아는 곳과 다릅니다. 매출 전략까지 함께 설계합니다</p></div>
+      <div class="why-card"><div class="why-icon">🤝</div><h3>직접 해본 사람</h3><p>오프라인 매장 운영대행 경험. 사장님 입장을 실제로 압니다</p></div>
+      <div class="why-card"><div class="why-icon">📋</div><h3>스스로 준비 가능하게</h3><p>컨설팅 업체 없이도 사장님이 직접 자금을 준비할 수 있도록 안내합니다</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="service">
+  <div class="section-inner">
+    <div class="sec-label">서비스 구조</div>
+    <h2 class="sec-title">단계별로 선택하세요</h2>
+    <p class="sec-sub">필요한 것만, 부담 없이 시작할 수 있습니다</p>
+    <div class="service-steps">
+      <div class="step-wrap">
+        <div class="step-num-wrap"><div class="step-circle">01</div><span class="step-tag">FREE</span></div>
+        <div class="step-body">
+          <span class="price price-free">무료</span>
+          <h3>초기 상담 — 지금 자금 받을 수 있는지 확인</h3>
+          <p>사장님 현재 상황(신용·매출·업력·업종)을 바탕으로 신청 가능한 자금이 있는지 1차 확인해드립니다.</p>
+          <ul class="step-features">
+            <li>정책자금 수령 가능 여부 1차 진단</li>
+            <li>마케팅 현황 점검</li>
+            <li>지원금 해당 여부 확인</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step-wrap" id="report">
+        <div class="step-num-wrap"><div class="step-circle">02</div><span class="step-tag">PAID</span></div>
+        <div class="step-body">
+          <span class="price price-paid">유료 · 상담 후 안내</span>
+          <h3>자금계획서 — 사장님이 직접 준비할 수 있는 로드맵</h3>
+          <p>단순한 자금 안내서가 아닙니다. 이 문서 하나로 컨설팅 업체 없이도 사장님이 스스로 자금을 신청할 수 있습니다.</p>
+          <ul class="step-features">
+            <li>신청 가능한 자금 3~5개 리스트업 (기관·한도·금리·조건)</li>
+            <li>현재 사장님의 강점과 보완해야 할 약점 분석</li>
+            <li>자금별 우선순위와 신청 시기 전략</li>
+            <li>심사 전 체크리스트 (부결 막는 사전 준비 사항)</li>
+            <li>서류 준비 가이드 (무엇을, 언제까지, 어떻게)</li>
+          </ul>
+          <div class="highlight-msg">💡 이 문서만 있으면 별도 컨설팅 없이도 직접 신청 가능합니다. 그래서 비용이 아깝지 않습니다.</div>
+        </div>
+      </div>
+      <div class="step-wrap">
+        <div class="step-num-wrap"><div class="step-circle">03</div><span class="step-tag">PAID</span></div>
+        <div class="step-body">
+          <span class="price price-paid">유료 · 분량별 차등</span>
+          <h3>사업계획서 대행 — 심사역이 OK 할 수밖에 없게</h3>
+          <p>소상공인에게 가장 취약한 부분이 사업계획서입니다. 잘 쓴 사업계획서 하나가 자금 승인을 결정합니다.</p>
+          <ul class="step-features">
+            <li>단점은 최소화, 가점 요소는 최대화하는 전략적 구성</li>
+            <li>심사역이 한눈에 사업을 파악할 수 있는 구조화</li>
+            <li>말이 아닌 문서로 설득 — 수치·근거·차별점 포지셔닝</li>
+            <li>기존 사업자(소진공·신보) / 창업자(창진원·중진공) 맞춤 작성</li>
+          </ul>
+          <div class="highlight-msg">💡 같은 상황이어도 사업계획서 완성도에 따라 승인·부결이 갈립니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section doc-slider-wrap">
+  <div class="section-inner">
+    <div class="sec-label">자금계획서 예시</div>
+    <h2 class="sec-title">실제 이런 내용이 담깁니다</h2>
+    <p class="sec-sub">업종별 실제 자금계획서 구성 예시입니다 (개인정보 제외)</p>
+  </div>
+  <div style="max-width:960px;margin:24px auto 0;padding:0 clamp(16px,5vw,80px);">
+    <div class="doc-slider">
+      <div class="doc-card">
+        <div class="doc-card-header"><h4>정책자금 자문 및 자금진행계획서</h4><span>음식점 운영 사장님 | 2026년</span></div>
+        <div class="doc-card-body">
+          <div class="doc-section"><div class="doc-section-title">현황 진단</div><div class="doc-row"><span>업종</span><span>한식 일반음식점</span></div><div class="doc-row"><span>업력</span><span>2년 4개월</span></div><div class="doc-row"><span>월 매출</span><span>약 1,200만원</span></div><div class="doc-row"><span>신용등급</span><span>보통 (개선 필요)</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">추천 자금 (우선순위)</div><div class="doc-row"><span>1순위</span><span style="color:var(--red);font-weight:700;">소진공 경영안정자금</span></div><div class="doc-row"><span>예상 한도</span><span>3,000~5,000만원</span></div><div class="doc-row"><span>2순위</span><span>지역신보 소액보증</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">사전 준비 사항</div><span class="doc-tag tag-green">✓ 세금 체납 없음</span><span class="doc-tag tag-red">⚠ 부가세 신고 보완</span><span class="doc-tag tag-blue">→ 주소 일치 확인</span></div>
+          <div class="doc-highlight">이 문서로 컨설팅 업체 없이 직접 신청 가능합니다</div>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-header"><h4>정책자금 자문 및 자금진행계획서</h4><span>서비스업 1인 사업자 | 2026년</span></div>
+        <div class="doc-card-body">
+          <div class="doc-section"><div class="doc-section-title">현황 진단</div><div class="doc-row"><span>업종</span><span>경영컨설팅업</span></div><div class="doc-row"><span>업력</span><span>1년 2개월</span></div><div class="doc-row"><span>월 매출</span><span>약 350만원</span></div><div class="doc-row"><span>신용등급</span><span>양호</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">추천 자금 (우선순위)</div><div class="doc-row"><span>1순위</span><span style="color:var(--red);font-weight:700;">신보 창업기업 보증</span></div><div class="doc-row"><span>예상 한도</span><span>2,000~3,000만원</span></div><div class="doc-row"><span>2순위</span><span>소진공 성장촉진자금</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">전략 포인트</div><span class="doc-tag tag-green">✓ 매출 성장 추세</span><span class="doc-tag tag-blue">→ 사업계획서 보완 시 한도 상향</span></div>
+          <div class="doc-highlight">강점·약점 분석으로 최적 신청 시기 안내</div>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-header"><h4>정책자금 자문 및 자금진행계획서</h4><span>예비창업자 (청년) | 2026년</span></div>
+        <div class="doc-card-body">
+          <div class="doc-section"><div class="doc-section-title">현황 진단</div><div class="doc-row"><span>상태</span><span>예비창업자</span></div><div class="doc-row"><span>나이</span><span>만 31세</span></div><div class="doc-row"><span>아이템</span><span>온라인 교육 서비스</span></div><div class="doc-row"><span>신용</span><span>양호</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">추천 자금 (우선순위)</div><div class="doc-row"><span>1순위</span><span style="color:var(--red);font-weight:700;">예비창업패키지 (창진원)</span></div><div class="doc-row"><span>지원 규모</span><span>최대 7,000만원</span></div><div class="doc-row"><span>2순위</span><span>청년창업사관학교</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">핵심 준비 사항</div><span class="doc-tag tag-green">✓ 청년 우대 가점</span><span class="doc-tag tag-red">→ 사업계획서 완성도가 핵심</span></div>
+          <div class="doc-highlight">사업자 없어도 지금 바로 준비 시작 가능</div>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-header"><h4>정책자금 자문 및 자금진행계획서</h4><span>소매업 운영 사장님 | 2026년</span></div>
+        <div class="doc-card-body">
+          <div class="doc-section"><div class="doc-section-title">현황 진단</div><div class="doc-row"><span>업종</span><span>의류 소매업</span></div><div class="doc-row"><span>업력</span><span>3년 1개월</span></div><div class="doc-row"><span>연 매출</span><span>약 1.8억원</span></div><div class="doc-row"><span>신용등급</span><span>보통</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">추천 자금 (우선순위)</div><div class="doc-row"><span>1순위</span><span style="color:var(--red);font-weight:700;">중진공 운전자금</span></div><div class="doc-row"><span>예상 한도</span><span>5,000만~1억원</span></div><div class="doc-row"><span>2순위</span><span>소진공 성장촉진자금</span></div></div>
+          <div class="doc-section"><div class="doc-section-title">리스크 체크</div><span class="doc-tag tag-green">✓ 매출 증가 추세</span><span class="doc-tag tag-red">⚠ 기대출 현황 확인</span></div>
+          <div class="doc-highlight">신청 순서 전략으로 한도 최대화 가능</div>
+        </div>
+      </div>
+    </div>
+    <p class="scroll-hint">← 좌우로 스크롤하세요 →</p>
+  </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="section-inner">
+    <div class="sec-label">상담 후기</div>
+    <h2 class="sec-title">함께한 사장님들의 이야기</h2>
+    <p class="sec-sub">진심을 담은 상담은 결과로 증명됩니다</p>
+  </div>
+  <div style="max-width:960px;margin:24px auto 0;padding:0 clamp(16px,5vw,80px);">
+    <div class="review-slider">
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"자금계획서 하나로 어디에 신청해야 할지, 뭘 준비해야 할지 다 정리됐어요. 컨설팅 업체 없이 직접 소진공 신청해서 승인 받았습니다."</p><div class="review-author"><div class="review-avatar">김</div><div class="review-info"><strong>김*영 사장님</strong><span>음식점 운영 | 정책자금 컨설팅</span></div></div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"사업계획서를 써본 적이 없어서 막막했는데, 심사역 눈에 맞게 전략적으로 써주셔서 창진원 예비창업패키지 합격했어요."</p><div class="review-author"><div class="review-avatar">이</div><div class="review-info"><strong>이*수 대표님</strong><span>예비창업자 | 사업계획서 대행</span></div></div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"다른 업체들은 성공하면 수수료 3% 받는다고 했는데 여기는 그런 거 없어요. 자금계획서만 받았는데도 혼자 준비하기 충분했습니다."</p><div class="review-author"><div class="review-avatar">박</div><div class="review-info"><strong>박*정 사장님</strong><span>소매업 운영 | 자금계획서</span></div></div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"마케팅 업체에 돈만 날렸는데, 직접 할 수 있는 방법을 알려주셔서 비용 줄이고 매출은 올렸어요. 실제 사장 입장을 아시는 분이에요."</p><div class="review-author"><div class="review-avatar">최</div><div class="review-info"><strong>최*희 사장님</strong><span>카페 운영 | 마케팅 전략</span></div></div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"신용점수가 낮아서 포기하고 있었는데 소진공은 기준이 다르다고 알려주셔서 신청했고 실제로 승인 받았습니다. 몰라서 못 받을 뻔 했어요."</p><div class="review-author"><div class="review-avatar">윤</div><div class="review-info"><strong>윤*현 사장님</strong><span>서비스업 운영 | 정책자금</span></div></div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"고용지원금 있는 줄도 몰랐어요. 직원 채용할 때 바로 신청했더니 월 60만원씩 1년을 받았습니다. 이런 정보를 이렇게 정리해주는 곳이 없어요."</p><div class="review-author"><div class="review-avatar">정</div><div class="review-info"><strong>정*진 사장님</strong><span>제조업 운영 | 지원금 안내</span></div></div></div>
+    </div>
+    <p class="scroll-hint">← 좌우로 스크롤하세요 →</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="sec-label">진행 과정</div>
+    <h2 class="sec-title">이렇게 진행됩니다</h2>
+    <div class="process-grid">
+      <div class="p-step"><span class="p-badge">STEP 01</span><div class="p-circle">📋</div><h4>상담 신청</h4><p>구글폼 또는<br>카카오톡으로 접수</p></div>
+      <div class="p-step"><span class="p-badge">STEP 02</span><div class="p-circle">🔍</div><h4>무료 초기 상담</h4><p>자금 가능 여부<br>방향 안내</p></div>
+      <div class="p-step"><span class="p-badge">STEP 03</span><div class="p-circle">📄</div><h4>자금계획서 제공</h4><p>맞춤 로드맵<br>PDF 전달</p></div>
+      <div class="p-step"><span class="p-badge">STEP 04</span><div class="p-circle">✅</div><h4>선택 진행</h4><p>필요한 서비스만<br>골라서 진행</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section form-section" id="contact">
+  <div class="section-inner">
+    <div class="sec-label">무료 상담 신청</div>
+    <h2 class="sec-title">지금 바로 시작하세요</h2>
+    <p class="sec-sub">혼자 고민하면 답이 보이지 않지만,<br>함께 대화하면 길이 보입니다</p>
+    <div class="form-inner">
+      <div class="form-left">
+        <p>사장님 상황을 알려주시면 24시간 이내에 담당자가 연락드립니다. 초기 상담은 무료이며 어떤 강요도 없습니다.</p>
+        <div class="form-promise">
+          <div class="promise-item">초기 상담 완전 무료</div>
+          <div class="promise-item">성공보수 없음 — 자금 승인 여부 무관</div>
+          <div class="promise-item">24시간 이내 연락</div>
+          <div class="promise-item">전국 비대면 상담 가능</div>
+          <div class="promise-item">10년+ 현장 경력 전문가 직접 상담</div>
+        </div>
+      </div>
+      <div class="form-right">
+        <h3>📋 무료 상담 신청서</h3>
+        <p class="form-sub">아래 버튼을 눌러 간단한 정보를 입력해주세요</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeBpS_RHvqYGitgyRSFgHmIf-ylVNlfWOCnolexO5xeQrMiLA/viewform" target="_blank" class="google-form-btn">📋 상담 신청서 작성하기</a>
+        <div class="form-or">또는</div>
+        <a href="http://pf.kakao.com/_BwKMX/chat" target="_blank" class="kakao-big">💬 카카오톡으로 바로 문의</a>
+        <p class="form-note">* 상담은 무료이며 강요나 부담은 없습니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="foot-logo">사장님 <em>생존</em>연구소</div>
+    <div class="foot-info">
+      <p>상호명: 사장님 생존연구소 | 운영사: 소생컴퍼니</p>
+      <p>사업자등록번호: 776-12-03242</p>
+      <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="43302229222d243022262d24292c2d03242e222a2f6d202c2e">[email&#160;protected]</a></p>
+      <p>소상공인협회 정책·마케팅 자문위원 역임 | 정책자금 전문가 10년</p>
+    </div>
+  </div>
+  <div class="foot-links">
+    <a href="http://pf.kakao.com/_BwKMX" target="_blank">💬 카카오톡 채널</a>
+    <a href="https://blog.naver.com/spoonup_" target="_blank">📝 네이버 블로그</a>
+    <a href="https://sajangsaengjon-tech.github.io/sajangsaengjon/sajang-check.html" target="_blank">🔍 정책자금 진단</a>
+    <a href="https://sajangsaengjon-tech.github.io/sajangsaengjon/sajang-funds.html" target="_blank">💰 창업자금 가이드<
