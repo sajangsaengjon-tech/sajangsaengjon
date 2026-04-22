@@ -615,6 +615,44 @@ function startLoading() {
 }
 
 // ══════════════════════════════════════
+// ★ 구글시트 전송 함수 (새로 추가)
+// ══════════════════════════════════════
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwBpYGOe2sgCb3_a9kGBpAYcvyJEtyszhCpx4u6DxZzYd-iQytG2QFAsuwUSBLfTV5XPA/exec';
+
+function sendToSheet(a, c) {
+  try {
+    var payload = {
+      접수일시:  new Date().toLocaleString('ko-KR'),
+      유형:      state.type + '유형',
+      상호명:    a.bizName   || '',
+      업종:      a.industry  || '',
+      월매출:    a.revenue   || '',
+      월순수익:  a.profit    || '',
+      월노동시간: a.hours    || '',
+      총투자금:  a.investment|| '',
+      보유현금:  a.cash      || '',
+      월고정비:  a.fixedCost || '',
+      대출잔액:  a.debtTotal || '',
+      대출금리:  a.debtRate  || '',
+      소생지수:  c.score,
+      진단등급:  c.level,
+      실질시급:  c.hourlyWage,
+      런웨이:    typeof c.burnDays === 'number' ? c.burnDays + '일' : c.burnDays,
+      순이익률:  c.marginRate + '%'
+    };
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    console.log('[소생컴퍼니] 구글시트 전송 완료');
+  } catch(err) {
+    console.log('[소생컴퍼니] 전송 오류 (서비스 정상):', err);
+  }
+}
+
+// ══════════════════════════════════════
 // 보고서 렌더링
 // ══════════════════════════════════════
 function showReport() {
@@ -622,6 +660,9 @@ function showReport() {
   var c = calcAll(a);
   var today = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'});
   var reportNo = 'SOS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-5);
+
+  // ★ 구글시트 전송 (보고서 표시 직전)
+  sendToSheet(a, c);
 
   var body = el('report-body');
   body.innerHTML = buildReport(a, c, today, reportNo);
