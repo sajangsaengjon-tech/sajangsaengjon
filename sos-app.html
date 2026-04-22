@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사장님 생존 연구소 | 소생컴퍼니 — 무료 자가진단</title>
+<meta name="description" content="열심히 일하는데 왜 남는 게 없을까? 실질 시급·자금 런웨이·소생 지수를 무료로 진단합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E8351A;
+  --red-dim: #c02a12;
+  --dark: #0f0f0e;
+  --mid: #1a1a18;
+  --cream: #F2EDE4;
+  --muted: #888070;
+  --gold: #C9A84C;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--cream); font-family: var(--sans); overflow-x: hidden; }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type=number] { -moz-appearance: textfield; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes spin     { to{transform:rotate(360deg)} }
+@keyframes pulse    { 0%,100%{box-shadow:0 0 0 0 rgba(232,53,26,.45)} 50%{box-shadow:0 0 0 10px rgba(232,53,26,0)} }
+@keyframes scanline { 0%{transform:translateY(-100%)} 100%{transform:translateY(110vh)} }
+@keyframes barIn    { from{width:0} }
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── NAV ── */
+#topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  background: rgba(15,15,14,.93); border-bottom: 1px solid #222;
+  backdrop-filter: blur(10px); height: 48px;
+  display: flex; align-items: center; padding: 0 20px; gap: 6px;
+}
+#topnav .brand { font-family: var(--mono); font-size: .6rem; color: var(--red); letter-spacing: .18em; margin-right: 12px; white-space: nowrap; }
+#topnav button { background: none; border: none; color: #666; font-size: .72rem; font-family: var(--sans); cursor: pointer; padding: 4px 10px; white-space: nowrap; transition: color .2s; }
+#topnav button:hover { color: var(--red); }
+#topnav .nav-cta { margin-left: auto; background: var(--red); color: #fff !important; padding: 6px 14px !important; font-weight: 700; }
+
+/* ── PROGRESS BAR ── */
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--red); z-index: 1001; transition: width .4s ease; }
+
+/* ── HERO ── */
+#screen-hero {
+  align-items: center; justify-content: center;
+  padding: 80px 24px; position: relative; overflow: hidden;
+}
+.hero-ghost {
+  position: absolute; font-size: clamp(80px,17vw,200px);
+  font-weight: 900; color: rgba(232,53,26,.04);
+  letter-spacing: -.06em; user-select: none; pointer-events: none; line-height: 1;
+}
+.scanline {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg,transparent,var(--red),transparent);
+  animation: scanline 5s linear infinite; pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 2; text-align: center; max-width: 700px; animation: fadeUp .8s ease forwards; }
+.hero-tag { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; color: var(--red); margin-bottom: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
+.dot-pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; animation: pulse 1.8s infinite; }
+.hero-h1 { font-size: clamp(1.8rem,5.5vw,3.8rem); font-weight: 900; line-height: 1.2; letter-spacing: -.03em; word-break: keep-all; margin-bottom: 24px; }
+.hero-h1 .red { color: var(--red); }
+.hero-sub { color: #888; font-size: .98rem; line-height: 1.85; margin-bottom: 48px; word-break: keep-all; }
+.hero-sub strong { color: var(--cream); }
+.btn-primary { background: var(--red); color: #fff; border: none; padding: 18px 52px; font-size: 1rem; font-weight: 900; font-family: var(--sans); cursor: pointer; letter-spacing: .03em; transition: all .2s; animation: pulse 2.5s infinite; }
+.btn-primary:hover { background: var(--red-dim); transform: translateY(-2px); }
+.btn-secondary { background: transparent; color: #888; border: 1px solid #333; padding: 14px 20px; font-size: .9rem; font-family: var(--sans); cursor: pointer; transition: all .2s; }
+.btn-secondary:hover { border-color: var(--red); color: var(--cream); }
+.hero-note { margin-top: 14px; font-family: var(--mono); font-size: .62rem; color: #444; letter-spacing: .1em; }
+
+/* stats bar */
+.stats-bar { position: absolute; bottom: 0; left: 0; right: 0; display: flex; border-top: 1px solid #1e1e1c; }
+.stat-item { flex: 1; padding: 18px 12px; text-align: center; border-right: 1px solid #1e1e1c; }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 1.3rem; font-weight: 900; color: var(--red); font-family: var(--mono); letter-spacing: -.03em; display: block; }
+.stat-label { font-size: .62rem; color: #555; margin-top: 4px; display: block; }
+
+/* ── TYPE SELECT ── */
+#screen-type { align-items: center; justify-content: center; padding: 80px 24px; }
+.type-inner { max-width: 720px; width: 100%; animation: fadeUp .6s ease forwards; }
+.sec-kicker { font-family: var(--mono); font-size: .6rem; color: var(--red); letter-spacing: .2em; margin-bottom: 14px; text-transform: uppercase; text-align: center; }
+.sec-title { font-size: clamp(1.4rem,3.5vw,2.2rem); font-weight: 900; letter-spacing: -.025em; word-break: keep-all; text-align: center; margin-bottom: 8px; }
+.sec-sub { color: #666; font-size: .85rem; text-align: center; margin-bottom: 40px; }
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.type-card { background: rgba(255,255,255,.02); border: 2px solid rgba(255,255,255,.1); color: var(--cream); padding: 32px 24px; text-align: left; cursor: pointer; transition: all .25s; font-family: var(--sans); }
+.type-card:hover { background: rgba(232,53,26,.07); border-color: var(--red); transform: translateY(-4px); }
+.type-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+.type-name { font-size: 1.2rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: 10px; }
+.type-desc { color: #aaa; font-size: .92rem; line-height: 1.65; margin-bottom: 18px; }
+.type-traits li { font-size: .8rem; color: #666; margin-bottom: 5px; list-style: none; display: flex; gap: 8px; align-items: flex-start; }
+.type-traits li::before { content: '▶'; color: var(--red); font-size: .65rem; margin-top: 3px; flex-shrink: 0; }
+
+/* ── QUESTIONS ── */
+#screen-question { align-items: center; justify-content: center; padding: 80px 24px; }
+.q-inner { max-width: 560px; width: 100%; animation: fadeUp .45s ease forwards; }
+.q-meta { font-family: var(--mono); font-size: .6rem; color: var(--red); margin-bottom: 6px; letter-spacing: .18em; display: flex; gap: 16px; }
+.q-meta span.type-badge { color: #444; }
+.q-icon { font-size: 2.2rem; margin-bottom: 18px; display: block; }
+.q-label { font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 900; letter-spacing: -.025em; margin-bottom: 8px; word-break: keep-all; }
+.q-sub { color: #666; font-size: .85rem; margin-bottom: 32px; line-height: 1.6; }
+.q-input-wrap { position: relative; margin-bottom: 10px; }
+.q-input { width: 100%; background: rgba(255,255,255,.04); border: none; border-bottom: 2px solid var(--red); color: var(--cream); padding: 18px 72px 18px 20px; font-size: 1.35rem; font-weight: 700; font-family: var(--mono); outline: none; letter-spacing: .03em; }
+.q-input::placeholder { color: #333; font-weight: 400; }
+.q-unit { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #555; font-family: var(--mono); font-size: .82rem; }
+.q-hint { font-family: var(--mono); font-size: .65rem; color: #444; margin-bottom: 32px; display: flex; gap: 6px; }
+.q-hint span { color: var(--red); }
+.q-btns { display: flex; gap: 10px; }
+.q-btns .btn-primary { flex: 1; padding: 14px; font-size: .95rem; }
+
+/* ── LOADING ── */
+#screen-loading { align-items: center; justify-content: center; gap: 32px; }
+.loader { width: 52px; height: 52px; border: 3px solid rgba(232,53,26,.2); border-top: 3px solid var(--red); border-radius: 50%; animation: spin .9s linear infinite; }
+.load-steps { text-align: center; }
+.load-step { font-family: var(--mono); font-size: .76rem; letter-spacing: .08em; margin-bottom: 10px; transition: color .3s; display: flex; align-items: center; gap: 10px; justify-content: center; }
+.load-step.done { color: #333; }
+.load-step.active { color: var(--red); }
+.load-step.pending { color: #1e1e1e; }
+
+/* ── REPORT ── */
+#screen-report { background: #F5F3EE; color: #1a1a1a; display: block; }
+#report-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 999; background: rgba(26,39,68,.97); border-bottom: 1px solid #2a3a5a; height: 48px; display: flex; align-items: center; padding: 0 16px; gap: 4px; overflow-x: auto; }
+#report-nav .brand { font-family: var(--mono); font-size: .58rem; color: var(--red); margin-right: 12px; white-space: nowrap; letter-spacing: .1em; }
+#report-nav button { background: none; border: none; color: #556; font-size: .7rem; cursor: pointer; padding: 4px 10px; white-space: nowrap; font-family: var(--sans); transition: color .2s; }
+#report-nav button:hover { color: var(--red); }
+.report-actions { margin-left: auto; display: flex; gap: 6px; }
+.btn-print { background: #2a3a5a; color: #ccc; border: none; padding: 5px 12px; font-size: .7rem; cursor: pointer; font-family: var(--sans); }
+.btn-reset { background: var(--red); color: #fff; border: none; padding: 5px 12px; font-size: .7rem; cursor: pointer; font-family: var(--sans); font-weight: 700; }
+
+.report-body { padding-top: 48px; }
+
+/* Cover */
+.r-cover { background: #1A2744; color: #F0EBE0; padding: 56px 48px; position: relative; overflow: hidden; min-height: 55vh; display: flex; flex-direction: column; }
+.r-cover-ghost { position: absolute; bottom: -20px; right: -20px; font-size: clamp(80px,14vw,160px); font-weight: 900; color: rgba(255,255,255,.04); letter-spacing: -.06em; user-select: none; line-height: 1; }
+.r-cover-top { margin-bottom: auto; }
+.r-cover-brand { font-family: var(--mono); font-size: .62rem; color: var(--red); margin-bottom: 6px; letter-spacing: .18em; }
+.r-cover-link { font-family: var(--mono); font-size: .58rem; color: #445; }
+.r-cover-badge { display: inline-block; background: var(--red); color: #fff; padding: 5px 14px; font-family: var(--mono); font-size: .65rem; letter-spacing: .15em; margin-bottom: 18px; }
+.r-cover-title { font-size: clamp(2rem,5vw,3.2rem); font-weight: 900; line-height: 1.15; letter-spacing: -.03em; margin-bottom: 12px; }
+.r-cover-title span { color: var(--red); }
+.r-cover-desc { color: #556; font-size: .88rem; line-height: 1.7; }
+.r-cover-meta { margin-top: 40px; border-top: 1px solid #2a3a5a; padding-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
+.r-cover-meta-item label { font-family: var(--mono); font-size: .57rem; color: #445; display: block; margin-bottom: 3px; letter-spacing: .1em; }
+.r-cover-meta-item span { font-weight: 700; font-size: .88rem; color: #F0EBE0; }
+.r-cover-meta-item span.score { color: var(--score-color, #E67E22); }
+
+/* Report sections */
+.r-section { padding: 44px 32px; }
+.r-section.alt { background: #fff; }
+.r-section-label { font-family: var(--mono); font-size: .58rem; color: var(--red); margin-bottom: 10px; letter-spacing: .18em; text-transform: uppercase; }
+.r-section-title { font-weight: 900; font-size: 1.3rem; letter-spacing: -.02em; color: #1A2744; margin-bottom: 6px; }
+.r-section-sub { color: #888; font-size: .8rem; margin-bottom: 24px; }
+
+/* KPI grid */
+.kpi-wrap { display: grid; grid-template-columns: 160px 1fr; gap: 14px; margin-bottom: 20px; }
+.score-box { background: #fff; border: 1px solid #E0DEDA; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
+.score-circle { width: 88px; height: 88px; border-radius: 50%; border: 5px solid var(--score-color, #E67E22); display: flex; flex-direction: column; align-items: center; justify-content: center; background: color-mix(in srgb, var(--score-color, #E67E22) 12%, transparent); }
+.score-num { font-weight: 900; font-size: 1.9rem; color: var(--score-color, #E67E22); font-family: var(--mono); line-height: 1; }
+.score-denom { font-size: .58rem; color: #aaa; }
+.score-level { font-weight: 900; color: var(--score-color, #E67E22); }
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kpi-card { background: #fff; border: 1px solid #E0DEDA; padding: 14px 16px; }
+.kpi-icon { font-size: 1rem; margin-bottom: 7px; display: block; }
+.kpi-val { font-weight: 900; font-size: 1.4rem; font-family: var(--mono); letter-spacing: -.03em; line-height: 1; }
+.kpi-name { font-weight: 700; font-size: .76rem; color: #333; margin: 5px 0 2px; }
+.kpi-sub { font-size: .65rem; color: #aaa; }
+
+/* Alert cards */
+.alert-card { border-left: 4px solid; padding: 16px 18px; margin-bottom: 14px; }
+.alert-card.red   { background: #FDECEA; border-color: #C0392B; }
+.alert-card.amber { background: #FFF8E1; border-color: #E67E22; }
+.alert-card.green { background: #E8F5E9; border-color: #27AE60; }
+.alert-card.navy  { background: #EAF0FB; border-color: #1A2744; }
+.alert-label { font-family: var(--mono); font-size: .58rem; color: var(--red); margin-bottom: 10px; letter-spacing: .18em; text-transform: uppercase; }
+.alert-grid { display: grid; gap: 16px; margin-bottom: 12px; }
+.alert-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.alert-grid-item { text-align: center; }
+.alert-grid-item + .alert-grid-item { border-left: 1px solid rgba(0,0,0,.08); }
+.alert-big { font-weight: 900; font-size: 1.5rem; font-family: var(--mono); }
+.alert-name { font-size: .7rem; color: #666; margin-top: 4px; }
+.alert-note { font-size: .62rem; color: #aaa; }
+.bar-wrap { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.bar-fill { height: 100%; border-radius: 4px; animation: barIn 1.2s cubic-bezier(.4,0,.2,1) forwards; }
+.warn-text { font-size: .78rem; font-weight: 700; margin-top: 8px; }
+.runway-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 12px; }
+.runway-big { font-weight: 900; font-size: 2.4rem; font-family: var(--mono); }
+.runway-info { flex: 1; min-width: 180px; font-size: .83rem; color: #555; line-height: 1.8; }
+.saving-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; background: #fff; border: 1px solid #E0DEDA; padding: 12px 16px; text-align: center; }
+.saving-item { }
+.saving-item + .saving-item { border-left: 1px solid #f0f0f0; }
+.saving-val { font-weight: 900; font-size: 1.2rem; font-family: var(--mono); }
+.saving-label { font-size: .65rem; color: #888; margin-top: 3px; }
+
+/* Score table */
+.score-table { border: 1px solid #E0DEDA; overflow: hidden; margin-bottom: 24px; }
+.score-table-head { display: grid; grid-template-columns: 2fr 1.2fr 2fr 1fr; background: #1A2744; }
+.score-table-head div { color: #fff; font-weight: 700; font-size: .8rem; padding: 10px 14px; border-right: 1px solid #2a3a5a; }
+.score-table-head div:last-child { border-right: none; }
+.score-table-row { display: grid; grid-template-columns: 2fr 1.2fr 2fr 1fr; border-top: 1px solid #E0DEDA; }
+.score-table-row div { padding: 10px 14px; font-size: .83rem; border-right: 1px solid #E0DEDA; }
+.score-table-row div:last-child { border-right: none; font-family: var(--mono); font-weight: 900; text-align: center; }
+.score-table-foot { display: grid; grid-template-columns: 2fr 1.2fr 2fr 1fr; background: #C0392B; border-top: 2px solid #a93226; }
+.score-table-foot div { color: #fff; font-weight: 900; padding: 10px 14px; font-size: .88rem; border-right: 1px solid #a93226; font-family: var(--mono); }
+.score-table-foot div:last-child { border-right: none; text-align: center; }
+
+/* Two col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.risk-list { display: flex; flex-direction: column; gap: 10px; }
+.risk-item { border-left: 3px solid; padding: 14px 16px; background: #F7F5F0; }
+.risk-item-head { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: .7rem; font-weight: 700; border: 1px solid; white-space: nowrap; }
+.risk-title { font-weight: 700; font-size: .85rem; }
+.risk-detail { font-size: .78rem; color: #666; line-height: 1.65; margin-bottom: 6px; }
+.risk-action { font-size: .75rem; font-weight: 700; color: #27AE60; }
+.strength-list { display: flex; flex-direction: column; }
+.strength-item { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F0EDE8; font-size: .83rem; color: #333; }
+.strength-check { color: #27AE60; font-weight: 900; flex-shrink: 0; }
+.comment-box { margin-top: 12px; background: #EAF0FB; border: 1px solid #c8dcf0; padding: 14px 16px; }
+.comment-title { font-weight: 700; font-size: .82rem; color: #1A2744; margin-bottom: 8px; }
+.comment-text { font-size: .8rem; color: #444; line-height: 1.75; }
+
+/* Funding */
+.fund-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+.fund-item { background: #fff; border-left: 4px solid; padding: 20px 22px; }
+.fund-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.fund-rank { width: 26px; height: 26px; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: .8rem; flex-shrink: 0; }
+.fund-name { font-weight: 900; font-size: .98rem; }
+.fund-meta { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 12px; }
+.fund-meta-item { background: #F7F5F0; padding: 8px 12px; border: 1px solid #E0DEDA; }
+.fund-meta-label { font-size: .62rem; color: #aaa; margin-bottom: 3px; }
+.fund-meta-val { font-weight: 700; font-size: .83rem; font-family: var(--mono); }
+.fund-why { font-size: .8rem; color: #666; line-height: 1.65; margin-bottom: 6px; }
+.fund-action { font-size: .78rem; font-weight: 700; }
+.roadmap-wrap { background: #fff; border: 1px solid #E0DEDA; padding: 20px; }
+.roadmap-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid #F0EDE8; }
+.roadmap-row:last-child { border-bottom: none; }
+.roadmap-phase { font-weight: 900; font-size: .85rem; padding-top: 2px; }
+.roadmap-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.roadmap-chip { padding: 5px 12px; font-size: .78rem; font-weight: 600; border: 1px solid; }
+
+/* Solutions */
+.solution-list { display: flex; flex-direction: column; gap: 14px; }
+.solution-item { border-left: 4px solid; padding: 22px 24px; }
+.solution-step { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; margin-bottom: 4px; }
+.solution-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 10px; }
+.solution-desc { font-size: .85rem; color: #555; line-height: 1.7; margin-bottom: 10px; }
+.solution-effect { display: inline-block; background: #fff; padding: 6px 14px; font-size: .8rem; font-weight: 700; border: 1px solid; }
+
+/* CTA */
+.r-cta { background: #1A2744; color: #F0EBE0; padding: 52px 32px; }
+.r-cta-title { font-weight: 900; font-size: 1.3rem; letter-spacing: -.02em; margin-bottom: 8px; }
+.r-cta-sub { color: #556; font-size: .85rem; line-height: 1.85; margin-bottom: 32px; word-break: keep-all; }
+.r-cta-sub strong { color: #F0EBE0; }
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.plan-card { background: #1e2e50; border: 1px solid #2a3a5a; padding: 24px 20px; }
+.plan-card.red-top  { border-top: 3px solid var(--red); }
+.plan-card.gold-top { border-top: 3px solid #E67E22; }
+.plan-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.plan-name { font-weight: 900; font-size: 1rem; margin-bottom: 3px; }
+.plan-sub { color: #445; font-size: .75rem; }
+.plan-price { font-weight: 900; font-size: 1.5rem; font-family: var(--mono); }
+.plan-price.red  { color: var(--red); }
+.plan-price.gold { color: #E67E22; }
+.plan-note { font-size: .62rem; color: #445; }
+.plan-items li { display: flex; gap: 8px; font-size: .8rem; color: #aabbcc; margin-bottom: 7px; list-style: none; }
+.btn-kakao { display: block; text-align: center; background: #FEE500; color: #3A1D1D; padding: 17px; font-weight: 900; font-size: 1rem; text-decoration: none; letter-spacing: .02em; margin-bottom: 12px; }
+.r-cta-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.r-cta-links span { font-family: var(--mono); font-size: .6rem; color: #334; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .type-grid  { grid-template-columns: 1fr; }
+  .kpi-wrap   { grid-template-columns: 1fr; }
+  .two-col    { grid-template-columns: 1fr; }
+  .plan-grid  { grid-template-columns: 1fr; }
+  .fund-meta  { grid-template-columns: 1fr 1fr; }
+  .alert-grid.three { grid-template-columns: 1fr; }
+  .score-table-head, .score-table-row, .score-table-foot { grid-template-columns: 1.5fr 1fr 1.5fr 1fr; }
+  .r-cover { padding: 40px 24px; }
+  .r-section { padding: 36px 20px; }
+}
+
+@media print {
+  #topnav, #report-nav, .no-print { display: none !important; }
+  body { background: #fff; }
+  .report-body { padding-top: 0; }
+  #screen-report { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- 공통 네비 (앱 단계) -->
+<nav id="topnav" class="no-print">
+  <span class="brand">소생컴퍼니</span>
+  <span id="nav-step" style="font-size:.65rem;color:#555;font-family:var(--mono)"></span>
+  <a href="https://pf.kakao.com/_BwKMX" target="_blank" class="nav-cta" style="text-decoration:none;font-size:.7rem;font-weight:700;">💬 상담</a>
+</nav>
+
+<!-- 보고서 네비 -->
+<nav id="report-nav" style="display:none" class="no-print">
+  <span class="brand">소생컴퍼니</span>
+  <span id="rn-client" style="font-family:var(--mono);font-size:.65rem;color:#445;margin-right:12px;white-space:nowrap;"></span>
+  <button onclick="scrollTo('r-s1')">01 핵심지표</button>
+  <button onclick="scrollTo('r-s2')">02 소생지수</button>
+  <button onclick="scrollTo('r-s3')">03 자금계획</button>
+  <button onclick="scrollTo('r-s4')">04 처방전</button>
+  <button onclick="scrollTo('r-s5')">05 다음단계</button>
+  <div class="report-actions">
+    <button class="btn-print" onclick="window.print()">🖨 PDF</button>
+    <button class="btn-reset" onclick="resetApp()">↺ 다시진단</button>
+  </div>
+</nav>
+
+<!-- ══ SCREEN: HERO ══ -->
+<section id="screen-hero" class="screen active">
+  <div class="hero-ghost">SURVIVE</div>
+  <div class="scanline"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <span class="dot-pulse"></span>
+      소생컴퍼니 · 사장님 생존 연구소
+    </div>
+    <h1 class="hero-h1">
+      인테리어에 수억을 썼든,<br>
+      매일 15시간을 일하든<br>
+      <span class="red">전략이 없다면<br>결말은 '폐업'입니다.</span>
+    </h1>
+    <p class="hero-sub">
+      당신의 매장은 돈을 벌어다 주는 <strong>'자산'</strong>입니까,<br>
+      아니면 인생을 갉아먹는 <strong>'밑 빠진 독'</strong>입니까?
+    </p>
+    <button class="btn-primary" onclick="goTo('screen-type')">지금 바로 무료 자가진단 시작하기 →</button>
+    <p class="hero-note">무료 · 약 3분 · 즉시 결과 확인</p>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">73%</span><span class="stat-label">소상공인 5년 내 폐업률</span></div>
+    <div class="stat-item"><span class="stat-num">10년+</span><span class="stat-label">정책자금 컨설팅 경력</span></div>
+    <div class="stat-item"><span class="stat-num">0원</span><span class="stat-label">성공보수 없음</span></div>
+    <div class="stat-item"><span class="stat-num">무료</span><span class="stat-label">1단계 자가진단</span></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: TYPE ══ -->
+<section id="screen-type" class="screen">
+  <div class="type-inner">
+    <p class="sec-kicker">// SELECT TYPE</p>
+    <h2 class="sec-title">나는 어떤 사장님입니까?</h2>
+    <p class="sec-sub">더 가까운 유형을 선택하세요. 진단 방향이 달라집니다.</p>
+    <div class="type-grid">
+      <button class="type-card" onclick="selectType('A')">
+        <span class="type-icon">⏱</span>
+        <div class="type-name">A유형 · 생계형</div>
+        <div class="type-desc">열심히 일하는데<br>통장은 왜 비어갈까?</div>
+        <ul class="type-traits">
+          <li>하루 12시간+ 근무</li>
+          <li>인건비 절약이 목표</li>
+          <li>번아웃 직전 상태</li>
+          <li>폐업이 두려워 버팀</li>
+        </ul>
+      </button>
+      <button class="type-card" onclick="selectType('B')">
+        <span class="type-icon">💼</span>
+        <div class="type-name">B유형 · 투자형</div>
+        <div class="type-desc">번듯한 매장,<br>하지만 불안한 현금흐름</div>
+        <ul class="type-traits">
+          <li>수천만~수억 투자</li>
+          <li>회수 시점 불분명</li>
+          <li>직원 관리 스트레스</li>
+          <li>확장 vs 정리 기로</li>
+        </ul>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: QUESTION ══ -->
+<section id="screen-question" class="screen">
+  <div class="q-inner">
+    <div class="q-meta">
+      <span id="q-counter">Q 1 / 10</span>
+      <span class="type-badge" id="q-type-badge">유형 A</span>
+    </div>
+    <span class="q-icon" id="q-icon">📈</span>
+    <h2 class="q-label" id="q-label">월 매출액</h2>
+    <p class="q-sub" id="q-sub">가장 최근 달 기준</p>
+    <div class="q-input-wrap">
+      <input class="q-input" id="q-input" type="number" placeholder="예: 13000000" onkeydown="if(event.key==='Enter')nextQ()">
+      <span class="q-unit" id="q-unit">원</span>
+    </div>
+    <div class="q-hint"><span>💡</span><span id="q-hint-text">카드+현금+배달 합산, 부가세 제외</span></div>
+    <div class="q-btns">
+      <button class="btn-secondary" id="q-back-btn" onclick="prevQ()" style="display:none">← 이전</button>
+      <button class="btn-primary" onclick="nextQ()" id="q-next-btn">다음 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: LOADING ══ -->
+<section id="screen-loading" class="screen">
+  <div class="loader"></div>
+  <div class="load-steps" id="load-steps"></div>
+</section>
+
+<!-- ══ SCREEN: REPORT ══ -->
+<section id="screen-report" class="screen">
+  <div class="report-body" id="report-body"></div>
+</section>
+
+<div id="progress-bar" style="width:0"></div>
+
+<script>
+// ══════════════════════════════════════
+// 상수 & 데이터
+// ══════════════════════════════════════
+var MIN_WAGE = 10030;
+var QUESTIONS = [
+  { id:'bizName',   label:'상호명',              unit:'',     type:'text',   icon:'🏪', hint:'예: 홍길동 삼겹살',                placeholder:'예: 홍길동 삼겹살', sub:'보고서에 표시될 사업체명' },
+  { id:'industry',  label:'업종',                unit:'',     type:'text',   icon:'🗂', hint:'예: 음식업 / 세탁업 / 미용업',       placeholder:'예: 음식업 (삼겹살 전문점)', sub:'업종에 따라 적합 자금이 달라집니다' },
+  { id:'revenue',   label:'월 매출액',            unit:'원',   type:'number', icon:'📈', hint:'카드+현금+배달 합산, 부가세 제외',    placeholder:'예: 30000000', sub:'가장 최근 달 기준' },
+  { id:'profit',    label:'월 순수익',            unit:'원',   type:'number', icon:'💰', hint:'임대료·인건비·재료비 모두 빼고 남는 금액', placeholder:'예: 3000000', sub:'솔직한 숫자가 정확한 진단을 만듭니다' },
+  { id:'hours',     label:'월 총 노동시간',       unit:'시간', type:'number', icon:'⏱', hint:'하루 평균 × 월 근무일수',            placeholder:'예: 300', sub:'사장님 본인이 직접 일하는 시간' },
+  { id:'investment',label:'총 투자금',            unit:'원',   type:'number', icon:'🏗', hint:'권리금+인테리어+보증금+초기운영비 합산', placeholder:'예: 80000000', sub:'창업 때부터 지금까지 넣은 돈 전부' },
+  { id:'cash',      label:'현재 보유 현금(비상금)',unit:'원',   type:'number', icon:'🔐', hint:'사업용 통장 기준, 즉시 사용 가능한 금액', placeholder:'예: 35000000', sub:'이게 실제 런웨이입니다' },
+  { id:'fixedCost', label:'월 고정비',            unit:'원',   type:'number', icon:'📋', hint:'임대료·인건비 등 매달 나가는 비용',   placeholder:'예: 12000000', sub:'자금 데드라인 계산의 핵심' },
+  { id:'debtTotal', label:'기존 대출 잔액 합계',  unit:'원',   type:'number', icon:'🏦', hint:'카드론·캐피탈·은행 포함 전부',       placeholder:'예: 150000000', sub:'없으면 0 입력' },
+  { id:'debtRate',  label:'기존 대출 평균 금리',  unit:'%',    type:'number', icon:'📉', hint:'여러 건이면 평균값',                 placeholder:'예: 11', sub:'정책자금 대환 효과 산출에 사용됩니다' },
+];
+
+var state = { screen:'hero', type:null, qIdx:0, answers:{} };
+
+// ══════════════════════════════════════
+// 유틸
+// ══════════════════════════════════════
+function fmt(n)  { return Number(n).toLocaleString('ko-KR'); }
+function fmtM(n) {
+  n = Number(n);
+  if (n >= 100000000) return (n/100000000).toFixed(1)+'억원';
+  if (n >= 10000)     return Math.round(n/10000).toLocaleString()+'만원';
+  return fmt(n)+'원';
+}
+function el(id)  { return document.getElementById(id); }
+function scrollTo(id) { var e=document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+function calcAll(a) {
+  var revenue    = Number(a.revenue)    || 0;
+  var profit     = Number(a.profit)     || 0;
+  var hours      = Number(a.hours)      || 1;
+  var investment = Number(a.investment) || 0;
+  var cash       = Number(a.cash)       || 0;
+  var fixedCost  = Number(a.fixedCost)  || (revenue - profit);
+  var debtTotal  = Number(a.debtTotal)  || 0;
+  var debtRate   = Number(a.debtRate)   || 0;
+
+  var hourlyWage     = Math.round(profit / hours);
+  var marginRate     = revenue > 0 ? (profit / revenue * 100) : 0;
+  var burnDays       = fixedCost > 0 ? Math.floor(cash / (fixedCost / 30)) : 999;
+  var roiYears       = profit > 0   ? (investment / (profit * 12)) : 999;
+  var annualInterest = Math.round(debtTotal * debtRate / 100);
+  var interestSaving = Math.max(0, Math.round(annualInterest - debtTotal * 0.04));
+  var wageRatio      = hourlyWage / MIN_WAGE;
+
+  var score = 100;
+  if (wageRatio < 1)        score -= 30; else if (wageRatio < 1.5) score -= 14;
+  if (marginRate < 10)      score -= 25; else if (marginRate < 20) score -= 11;
+  if (burnDays < 30)        score -= 25; else if (burnDays < 60)   score -= 12;
+  if (roiYears > 10)        score -= 20; else if (roiYears > 5)    score -= 10;
+  score = Math.max(0, score);
+
+  var level      = score >= 70 ? '양호' : score >= 40 ? '주의' : '위험';
+  var levelColor = score >= 70 ? '#27AE60' : score >= 40 ? '#E67E22' : '#C0392B';
+  var wageColor  = wageRatio >= 1.5 ? '#27AE60' : wageRatio >= 1 ? '#E67E22' : '#C0392B';
+  var burnColor  = burnDays < 30 ? '#C0392B' : burnDays < 60 ? '#E67E22' : '#27AE60';
+  var roiColor   = roiYears > 7 ? '#C0392B' : roiYears > 4 ? '#E67E22' : '#27AE60';
+  var margColor  = marginRate < 15 ? '#C0392B' : marginRate < 25 ? '#E67E22' : '#27AE60';
+
+  return {
+    revenue:revenue, profit:profit, hours:hours, investment:investment,
+    cash:cash, fixedCost:fixedCost, debtTotal:debtTotal, debtRate:debtRate,
+    annualInterest:annualInterest, interestSaving:interestSaving,
+    hourlyWage:hourlyWage, marginRate:marginRate.toFixed(1),
+    burnDays:burnDays >= 999 ? '안정' : burnDays,
+    roiYears:roiYears >= 99 ? '∞' : roiYears.toFixed(1),
+    wageRatio:wageRatio, score:score, level:level, levelColor:levelColor,
+    wageColor:wageColor, burnColor:burnColor, roiColor:roiColor, margColor:margColor
+  };
+}
+
+// ══════════════════════════════════════
+// 화면 전환
+// ══════════════════════════════════════
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  var t = document.getElementById(screenId);
+  if (t) { t.classList.add('active'); window.scrollTo(0,0); }
+  state.screen = screenId;
+  el('topnav').style.display  = screenId === 'screen-report' ? 'none' : 'flex';
+  el('report-nav').style.display = screenId === 'screen-report' ? 'flex' : 'none';
+}
+
+function resetApp() {
+  state = { screen:'hero', type:null, qIdx:0, answers:{} };
+  el('progress-bar').style.width = '0';
+  goTo('screen-hero');
+  el('topnav').style.display = 'flex';
+  el('report-nav').style.display = 'none';
+}
+
+// ══════════════════════════════════════
+// 유형 선택
+// ══════════════════════════════════════
+function selectType(t) {
+  state.type = t;
+  state.qIdx = 0;
+  renderQuestion();
+  goTo('screen-question');
+}
+
+// ══════════════════════════════════════
+// 문항
+// ══════════════════════════════════════
+function renderQuestion() {
+  var q   = QUESTIONS[state.qIdx];
+  var pct = ((state.qIdx + 1) / QUESTIONS.length * 100);
+  el('progress-bar').style.width = pct + '%';
+  el('q-counter').textContent  = 'Q ' + (state.qIdx+1) + ' / ' + QUESTIONS.length;
+  el('q-type-badge').textContent = '유형 ' + state.type;
+  el('q-icon').textContent     = q.icon;
+  el('q-label').textContent    = q.label;
+  el('q-sub').textContent      = q.sub;
+  el('q-hint-text').textContent = q.hint;
+  el('q-unit').textContent     = q.unit;
+  el('q-next-btn').textContent = state.qIdx < QUESTIONS.length - 1 ? '다음 →' : 'AI 분석 시작 ▶';
+  el('q-back-btn').style.display = state.qIdx > 0 ? 'inline-block' : 'none';
+  var inp = el('q-input');
+  inp.type        = q.type === 'number' ? 'number' : 'text';
+  inp.placeholder = q.placeholder;
+  inp.value       = state.answers[q.id] || '';
+  el('nav-step').textContent = 'Q' + (state.qIdx+1) + '/' + QUESTIONS.length;
+  setTimeout(function(){ inp.focus(); }, 80);
+}
+
+function nextQ() {
+  var q   = QUESTIONS[state.qIdx];
+  var val = el('q-input').value.trim();
+  if (!val || (q.type === 'number' && (isNaN(Number(val)) || Number(val) < 0))) {
+    el('q-input').style.borderBottomColor = '#ff4d4d';
+    setTimeout(function(){ el('q-input').style.borderBottomColor = 'var(--red)'; }, 600);
+    return;
+  }
+  state.answers[q.id] = val;
+  if (state.qIdx < QUESTIONS.length - 1) {
+    state.qIdx++;
+    renderQuestion();
+  } else {
+    startLoading();
+  }
+}
+
+function prevQ() {
+  if (state.qIdx > 0) { state.qIdx--; renderQuestion(); }
+  else goTo('screen-type');
+}
+
+// ══════════════════════════════════════
+// 로딩
+// ══════════════════════════════════════
+var LOAD_STEPS = [
+  '재무 데이터 수신 중...','실질 시급 계산 중...','자금 런웨이 산출 중...',
+  '적합 정책자금 매칭 중...','소생 지수 분석 중...','보고서 구성 중...','분석 완료.'
+];
+
+function startLoading() {
+  goTo('screen-loading');
+  el('progress-bar').style.width = '100%';
+  var container = el('load-steps');
+  container.innerHTML = '';
+  LOAD_STEPS.forEach(function(s, i) {
+    var div = document.createElement('div');
+    div.className = 'load-step pending';
+    div.id = 'ls-' + i;
+    div.innerHTML = '<span>·</span><span>' + s + '</span>';
+    container.appendChild(div);
+  });
+  var i = 0;
+  function tick() {
+    if (i > 0) {
+      var prev = el('ls-'+(i-1));
+      if (prev) { prev.className='load-step done'; prev.querySelector('span').textContent='✓'; }
+    }
+    if (i < LOAD_STEPS.length) {
+      var cur = el('ls-'+i);
+      if (cur) { cur.className='load-step active'; cur.querySelector('span').textContent='›'; }
+      i++;
+      setTimeout(tick, 480);
+    } else {
+      setTimeout(showReport, 300);
+    }
+  }
+  tick();
+}
+
+// ══════════════════════════════════════
+// 보고서 렌더링
+// ══════════════════════════════════════
+function showReport() {
+  var a = state.answers;
+  var c = calcAll(a);
+  var today = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'});
+  var reportNo = 'SOS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-5);
+
+  var body = el('report-body');
+  body.innerHTML = buildReport(a, c, today, reportNo);
+
+  el('rn-client').textContent = a.bizName || '—';
+  document.documentElement.style.setProperty('--score-color', c.levelColor);
+
+  goTo('screen-report');
+  window.scrollTo(0,0);
+
+  // 게이지 바 애니메이션
+  setTimeout(function() {
+    document.querySelectorAll('.bar-fill[data-pct]').forEach(function(bar) {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  }, 300);
+}
+
+function tag(text, color) {
+  return '<span class="tag" style="color:'+color+';border-color:'+color+'44;background:'+color+'18">'+text+'</span>';
+}
+
+function buildReport(a, c, today, reportNo) {
+  var bizName   = a.bizName   || '—';
+  var industry  = a.industry  || '—';
+  var levelIcon = c.level==='위험' ? '🚨' : c.level==='주의' ? '⚠️' : '✅';
+  var wagePct   = Math.min(c.wageRatio * 50, 100).toFixed(1);
+
+  // 자금 추천 (업종·부채·신용 기반 간단 로직)
+  var funds = [
+    { rank:1, color:'#27AE60', name:'소진공 일반경영안정자금', inst:'소상공인시장진흥공단', amt:'2,000만원', rate:'정책 2~4%', period:'5년', prob:70,
+      why:'소상공인 기준 충족. 세금 체납 없을 시 신청 요건 완비.', action:'☎ 1357 전화상담 → 신청서 접수' },
+    { rank:2, color:'#E67E22', name:'지역신보재단 보증부 대출', inst:'지역 신용보증재단', amt:'1,000~3,000만원', rate:'4~5%', period:'3~5년', prob:60,
+      why:'소진공과 중복 신청 가능. 보증 심사 기반으로 신용점수 무관.', action:'관할 신보재단 방문 또는 전화 상담' },
+    { rank:3, color:'#1A2744', name:'기보 기술보증 (업력 후)', inst:'기술보증기금', amt:'5,000만원 이내', rate:'3~5%', period:'5년', prob:45,
+      why:'업력 요건 충족 후 신청. 지금부터 매출·성장 이력 관리 필요.', action:'업력 3년 도달 후 기보 상담 예약' },
+  ];
+
+  var risks = [];
+  if (Number(a.debtRate) >= 10) risks.push({ sev:'위험', color:'#C0392B', title:'고금리 부채 과다', detail:'연 이자비용 '+fmtM(c.annualInterest)+'. 정책자금 대환 시 연 '+fmtM(c.interestSaving)+' 절감 가능.', action:'소진공 경영안정자금으로 즉시 대환' });
+  if (c.wageRatio < 1)   risks.push({ sev:'위험', color:'#C0392B', title:'실질 시급 최저임금 미달', detail:'월 '+fmt(c.hours)+'시간 노동, 실수령 '+fmtM(c.profit)+'. 시급 '+fmt(c.hourlyWage)+'원으로 최저임금 미달.', action:'원가율 재설계 및 고마진 메뉴·서비스 비중 확대' });
+  else if (c.wageRatio < 1.3) risks.push({ sev:'주의', color:'#E67E22', title:'실질 시급 경계 수준', detail:'시급 '+fmt(c.hourlyWage)+'원. 최저임금 대비 '+( c.wageRatio*100).toFixed(0)+'%. 노동시간 대비 수익 개선 필요.', action:'월 노동시간 단축 또는 순수익 구조 개선' });
+  if (Number(c.marginRate) < 10) risks.push({ sev:'위험', color:'#C0392B', title:'순이익률 위험 수준', detail:'순이익률 '+c.marginRate+'%. 업종 평균(15~20%) 대비 현저히 낮음.', action:'원가 구조 분석 및 비용 절감 실행' });
+  else if (Number(c.marginRate) < 15) risks.push({ sev:'주의', color:'#E67E22', title:'순이익률 10~15% 경계선', detail:'순이익률 '+c.marginRate+'%. 업종 평균 하단. 구조 점검 필요.', action:'메뉴·서비스 원가율 분석 착수' });
+  if (risks.length === 0) risks.push({ sev:'양호', color:'#27AE60', title:'리스크 요인 없음', detail:'주요 재무 지표가 모두 기준치 이내입니다.', action:'현재 구조 유지 및 성장 전략 수립' });
+
+  var strengths = [];
+  if (c.wageRatio >= 1.3) strengths.push('실질 시급 최저임금 대비 '+( c.wageRatio*100).toFixed(0)+'% — 노동 대비 수익 양호');
+  if (Number(a.cash) >= 10000000) strengths.push('현금 보유 '+fmtM(a.cash)+' — 런웨이 확보, 급박한 위기 아님');
+  strengths.push('세금 체납 없음 (입력 기준) — 정책자금 신청 필수 요건 충족');
+  if (Number(c.roiYears) < 5 && c.roiYears !== '∞') strengths.push('투자금 회수 '+c.roiYears+'년 예상 — 수익성 구조 양호');
+  strengths.push('자가진단 완료 — 문제를 인식하고 행동하는 사장님');
+
+  var html = '';
+
+  // ── COVER ──
+  html += '<div class="r-cover">';
+  html += '<div class="r-cover-ghost">REPORT</div>';
+  html += '<div style="height:3px;background:#E8351A;position:absolute;top:0;left:0;right:0"></div>';
+  html += '<div class="r-cover-top"><div class="r-cover-brand">소생컴퍼니 · 사장님 생존 연구소</div><div class="r-cover-link">pf.kakao.com/_BwKMX</div></div>';
+  html += '<div style="margin:48px 0 32px">';
+  html += '<div class="r-cover-badge">정밀 재무진단 보고서 · 15만원 플랜</div>';
+  html += '<h1 class="r-cover-title">사장님 생존 진단<br><span>정밀 분석 보고서</span></h1>';
+  html += '<p class="r-cover-desc">감성은 공감하지만, 분석은 이성적으로.<br>당신의 숫자를 직면하고, 사업을 소생시킵니다.</p>';
+  html += '</div>';
+  html += '<div class="r-cover-meta">';
+  html += '<div class="r-cover-meta-item"><label>의뢰인</label><span>'+bizName+'</span></div>';
+  html += '<div class="r-cover-meta-item"><label>업종</label><span>'+industry+'</span></div>';
+  html += '<div class="r-cover-meta-item"><label>보고서 번호</label><span>'+reportNo+'</span></div>';
+  html += '<div class="r-cover-meta-item"><label>발행일</label><span>'+today+'</span></div>';
+  html += '<div class="r-cover-meta-item"><label>소생 지수</label><span class="score">'+c.score+'점 / 100점 ('+c.level+')</span></div>';
+  html += '<div class="r-cover-meta-item"><label>유형</label><span>'+state.type+'유형 · '+(state.type==='A'?'생계형':'투자형')+'</span></div>';
+  html += '</div></div>';
+
+  // ── S1 핵심 지표 ──
+  html += '<div id="r-s1" class="r-section">';
+  html += '<div class="r-section-label">SECTION 01 · FACT BOMBING</div>';
+  html += '<div class="r-section-title">팩트 폭격 — 핵심 재무 지표</div>';
+  html += '<div class="r-section-sub">감정을 제거하고 숫자만 직면합니다.</div>';
+
+  html += '<div class="kpi-wrap">';
+  html += '<div class="score-box"><div style="font-family:var(--mono);font-size:.58rem;color:#E8351A;margin-bottom:10px;letter-spacing:.18em;text-transform:uppercase">소생 지수</div>';
+  html += '<div class="score-circle"><div class="score-num">'+c.score+'</div><div class="score-denom">/ 100</div></div>';
+  html += '<div class="score-level">'+levelIcon+' '+c.level+'</div></div>';
+  html += '<div class="kpi-grid">';
+  var kpis = [
+    { icon:'⏱', label:'실질 시급', val:fmt(c.hourlyWage)+'원/h', sub:'최저임금 대비 '+(c.wageRatio*100).toFixed(0)+'%', color:c.wageColor },
+    { icon:'🔐', label:'자금 런웨이', val:(typeof c.burnDays==='number'?c.burnDays+'일':c.burnDays), sub:'비상금 기준 버틸 수 있는 시간', color:c.burnColor },
+    { icon:'🏗', label:'투자 회수', val:c.roiYears+(c.roiYears==='∞'?'':'년'), sub:'현 수익 기준 ROI', color:c.roiColor },
+    { icon:'📊', label:'순이익률', val:c.marginRate+'%', sub:'매출 대비 실수령 비율', color:c.margColor },
+  ];
+  kpis.forEach(function(k) {
+    html += '<div class="kpi-card"><span class="kpi-icon">'+k.icon+'</span><div class="kpi-val" style="color:'+k.color+'">'+k.val+'</div><div class="kpi-name">'+k.label+'</div><div class="kpi-sub">'+k.sub+'</div></div>';
+  });
+  html += '</div></div>';
+
+  // 실질 시급 바
+  html += '<div class="alert-card ' + (c.wageRatio < 1 ? 'red' : c.wageRatio < 1.3 ? 'amber' : 'green') + '" style="margin-bottom:14px">';
+  html += '<div class="alert-label">REAL HOURLY WAGE — 실질 시급 vs 최저임금</div>';
+  html += '<div class="alert-grid three" style="margin-bottom:14px">';
+  html += '<div class="alert-grid-item"><div class="alert-big" style="color:'+c.wageColor+'">'+fmt(c.hourlyWage)+'원</div><div class="alert-name">'+bizName+' 실질 시급</div><div class="alert-note">'+fmtM(a.profit)+' ÷ '+fmt(a.hours)+'h</div></div>';
+  html += '<div class="alert-grid-item"><div class="alert-big" style="color:#333">'+fmt(MIN_WAGE)+'원</div><div class="alert-name">2024 법정 최저임금</div></div>';
+  html += '<div class="alert-grid-item"><div class="alert-big" style="color:'+c.wageColor+'">'+(c.wageRatio*100).toFixed(0)+'%</div><div class="alert-name">최저임금 대비</div>'+tag(c.wageRatio>=1.5?'양호':c.wageRatio>=1?'경계':'최저임금 미달', c.wageColor)+'</div>';
+  html += '</div>';
+  html += '<div class="bar-wrap"><div class="bar-fill" data-pct="'+wagePct+'" style="background:'+c.wageColor+';width:0"></div></div>';
+  if (c.wageRatio < 1) html += '<p class="warn-text" style="color:#C0392B">⚠ 직원 한 명 고용 비용도 못 버는 구조입니다. 즉각적인 원가 재설계가 필요합니다.</p>';
+  html += '</div>';
+
+  // 런웨이
+  html += '<div class="alert-card ' + (typeof c.burnDays==='number' && c.burnDays<30?'red':typeof c.burnDays==='number'&&c.burnDays<60?'amber':'green') + '">';
+  html += '<div class="alert-label">CASH RUNWAY — 자금 데드라인</div>';
+  html += '<div class="runway-row">';
+  html += '<div><div class="runway-big" style="color:'+c.burnColor+'">'+(typeof c.burnDays==='number'?c.burnDays+'일':'안정')+'</div><div style="font-size:.72rem;color:#666">현금 소진 예상 기간</div></div>';
+  html += '<div class="runway-info"><div>보유 현금: <strong>'+fmtM(a.cash)+'</strong></div><div>월 고정비: <strong>'+fmtM(a.fixedCost)+'</strong></div>';
+  if (typeof c.burnDays==='number' && c.burnDays<60) html += '<div style="color:#C0392B;font-weight:700;margin-top:4px">→ 즉각적인 자금 수혈이 필요합니다.</div>';
+  html += '</div></div>';
+  if (Number(a.debtTotal) > 0) {
+    html += '<div class="saving-grid">';
+    html += '<div class="saving-item"><div class="saving-val" style="color:#C0392B">'+fmtM(c.annualInterest)+'</div><div class="saving-label">현재 연 이자비용</div></div>';
+    html += '<div class="saving-item"><div class="saving-val" style="color:#27AE60">'+fmtM(Math.round(Number(a.debtTotal)*0.04))+'</div><div class="saving-label">정책금리(4%) 대환 후</div></div>';
+    html += '<div class="saving-item"><div class="saving-val" style="color:#27AE60">'+fmtM(c.interestSaving)+'</div><div class="saving-label">연간 절감 가능</div></div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '</div>';
+
+  // ── S2 소생지수 ──
+  html += '<div id="r-s2" class="r-section alt">';
+  html += '<div class="r-section-label">SECTION 02 · SURVIVAL SCORE</div>';
+  html += '<div class="r-section-title">소생 지수 & 사업 구조 진단</div>';
+  html += '<div class="r-section-sub">4개 항목 기준, 100점 만점 산출</div>';
+
+  var scoreRows = [
+    { label:'실질 시급', val:fmt(c.hourlyWage)+'원', judge: c.wageRatio<1?'최저임금 미달 → -30점':c.wageRatio<1.5?'경계 구간 → -14점':'양호 — 감점 없음', pts:c.wageRatio<1?'-30점':c.wageRatio<1.5?'-14점':'0점', bg:c.wageRatio<1?'#FDECEA':c.wageRatio<1.5?'#FFF8E1':'#E8F5E9', pc:c.wageRatio<1?'#C0392B':c.wageRatio<1.5?'#E67E22':'#27AE60' },
+    { label:'순이익률', val:c.marginRate+'%', judge: Number(c.marginRate)<10?'10% 미만 → -25점':Number(c.marginRate)<20?'10~20% 구간 → -11점':'20% 이상 — 감점 없음', pts:Number(c.marginRate)<10?'-25점':Number(c.marginRate)<20?'-11점':'0점', bg:Number(c.marginRate)<10?'#FDECEA':Number(c.marginRate)<20?'#FFF8E1':'#E8F5E9', pc:Number(c.marginRate)<10?'#C0392B':Number(c.marginRate)<20?'#E67E22':'#27AE60' },
+    { label:'자금 런웨이', val:(typeof c.burnDays==='number'?c.burnDays+'일':'안정'), judge: typeof c.burnDays==='number'&&c.burnDays<30?'30일 미만 → -25점':typeof c.burnDays==='number'&&c.burnDays<60?'60일 미만 → -12점':'60일 이상 — 감점 없음', pts:typeof c.burnDays==='number'&&c.burnDays<30?'-25점':typeof c.burnDays==='number'&&c.burnDays<60?'-12점':'0점', bg:typeof c.burnDays==='number'&&c.burnDays<30?'#FDECEA':typeof c.burnDays==='number'&&c.burnDays<60?'#FFF8E1':'#E8F5E9', pc:typeof c.burnDays==='number'&&c.burnDays<30?'#C0392B':typeof c.burnDays==='number'&&c.burnDays<60?'#E67E22':'#27AE60' },
+    { label:'투자 회수 기간', val:c.roiYears+(c.roiYears==='∞'?'':'년'), judge: c.roiYears==='∞'||Number(c.roiYears)>10?'10년 초과 → -20점':Number(c.roiYears)>5?'5~10년 → -10점':'5년 이내 — 감점 없음', pts:c.roiYears==='∞'||Number(c.roiYears)>10?'-20점':Number(c.roiYears)>5?'-10점':'0점', bg:c.roiYears==='∞'||Number(c.roiYears)>10?'#FDECEA':Number(c.roiYears)>5?'#FFF8E1':'#E8F5E9', pc:c.roiYears==='∞'||Number(c.roiYears)>10?'#C0392B':Number(c.roiYears)>5?'#E67E22':'#27AE60' },
+  ];
+  html += '<div class="score-table">';
+  html += '<div class="score-table-head"><div>평가 항목</div><div>측정값</div><div>기준 / 판정</div><div>감점</div></div>';
+  scoreRows.forEach(function(r) {
+    html += '<div class="score-table-row" style="background:'+r.bg+'"><div style="font-weight:700">'+r.label+'</div><div style="font-weight:900;color:'+r.pc+';font-family:var(--mono)">'+r.val+'</div><div>'+r.judge+'</div><div style="color:'+r.pc+'">'+r.pts+'</div></div>';
+  });
+  html += '<div class="score-table-foot"><div>소생 지수 합계</div><div>'+c.score+'점</div><div>'+(c.level==='위험'?'🚨':c.level==='주의'?'⚠️':'✅')+' '+c.level+' 구간</div><div>−'+(100-c.score)+'점</div></div>';
+  html += '</div>';
+
+  html += '<div class="two-col">';
+  // 리스크
+  html += '<div><div style="font-weight:900;font-size:.88rem;color:#C0392B;margin-bottom:12px">🔴 리스크 요인</div><div class="risk-list">';
+  risks.forEach(function(r) {
+    html += '<div class="risk-item" style="border-color:'+r.color+'"><div class="risk-item-head">'+tag(r.sev,r.color)+'<span class="risk-title">'+r.title+'</span></div><p class="risk-detail">'+r.detail+'</p><div class="risk-action">→ '+r.action+'</div></div>';
+  });
+  html += '</div></div>';
+  // 강점
+  html += '<div><div style="font-weight:900;font-size:.88rem;color:#27AE60;margin-bottom:12px">🟢 강점 요인</div>';
+  html += '<div class="strength-list" style="background:#fff;border:1px solid #E0DEDA;padding:0 16px">';
+  strengths.forEach(function(s) {
+    html += '<div class="strength-item"><span class="strength-check">✓</span>'+s+'</div>';
+  });
+  html += '</div>';
+  html += '<div class="comment-box"><div class="comment-title">📌 컨설턴트 총평</div>';
+  var comment = '소생 지수 '+c.score+'점('+c.level+') 기준으로 ';
+  if (c.level==='위험') comment += '즉각적인 구조 개입이 필요합니다. 정책자금 수혈과 원가 재설계를 동시에 진행해야 합니다.';
+  else if (c.level==='주의') comment += '구조적 취약점이 발견됩니다. 정책자금으로 이자 부담을 낮추고 수익 구조를 개선하면 6개월 내 양호 구간 진입이 가능합니다.';
+  else comment += '기본 구조는 안정적입니다. 성장 전략을 수립하여 현재 수준을 한 단계 더 끌어올릴 시점입니다.';
+  html += '<p class="comment-text">'+comment+'</p></div></div>';
+  html += '</div>';
+  html += '</div>';
+
+  // ── S3 자금계획 ──
+  html += '<div id="r-s3" class="r-section">';
+  html += '<div class="r-section-label">SECTION 03 · FUNDING PLAN</div>';
+  html += '<div class="r-section-title">정책자금 수혈 계획 (자금진행계획서)</div>';
+  html += '<div class="r-section-sub">수혜 가능 자금 분석 · 신청 우선순위 · 조달 타임라인</div>';
+  html += '<div class="fund-list">';
+  funds.forEach(function(f) {
+    html += '<div class="fund-item" style="border-color:'+f.color+'">';
+    html += '<div class="fund-head"><div class="fund-rank">'+f.rank+'</div><span class="fund-name">'+f.name+'</span>'+tag('승인 가능성 '+f.prob+'%',f.color)+tag('즉시 신청','#C0392B')+'</div>';
+    html += '<div class="fund-meta">';
+    [['기관',f.inst],['한도',f.amt],['금리',f.rate],['기간',f.period]].forEach(function(m) {
+      html += '<div class="fund-meta-item"><div class="fund-meta-label">'+m[0]+'</div><div class="fund-meta-val">'+m[1]+'</div></div>';
+    });
+    html += '</div>';
+    html += '<p class="fund-why">'+f.why+'</p>';
+    html += '<div class="fund-action" style="color:'+f.color+'">→ ACTION: '+f.action+'</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="roadmap-wrap">';
+  html += '<div style="font-family:var(--mono);font-size:.58rem;color:#E8351A;margin-bottom:16px;letter-spacing:.18em;text-transform:uppercase">FUNDING ROADMAP — 조달 타임라인</div>';
+  var roadmap = [
+    { phase:'즉시 (이번 달)', color:'#C0392B', bg:'#FDECEA', items:['소진공 일반경영안정자금 신청 (☎ 1357)','지역신보재단 보증 상담 예약','공통 서류 준비 (사업자등록증·매출증빙·임대차계약서)'] },
+    { phase:'1개월 후', color:'#E67E22', bg:'#FFF8E1', items:['1순위 자금 승인 시 고금리 대출 즉시 대환','이자 절감분 순수익 재확인','원가율 분석 착수'] },
+    { phase:'6개월 후', color:'#1A2744', bg:'#EAF0FB', items:['신용점수 개선 확인','추가 운전자금 조달 검토','매출 구조 개선 결과 점검'] },
+  ];
+  roadmap.forEach(function(r) {
+    html += '<div class="roadmap-row"><div class="roadmap-phase" style="color:'+r.color+'">'+r.phase+'</div><div class="roadmap-items">';
+    r.items.forEach(function(item) {
+      html += '<div class="roadmap-chip" style="background:'+r.bg+';border-color:'+r.color+'44;color:'+r.color+'">'+item+'</div>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div></div>';
+
+  // ── S4 처방전 ──
+  html += '<div id="r-s4" class="r-section alt">';
+  html += '<div class="r-section-label">SECTION 04 · SOLUTION</div>';
+  html += '<div class="r-section-title">소생을 위한 3단계 처방전</div>';
+  html += '<div class="r-section-sub">숫자가 가리키는 방향으로만 움직입니다.</div>';
+  var solutions = [
+    { step:'01', color:'#C0392B', bg:'#FDECEA', title:'정책자금 수혈', desc:'소진공·지역신보 정책자금으로 고금리 부채 즉시 대환. 성공보수 없이 맞춤 상품 매칭.', effect:'연 '+fmtM(c.interestSaving)+' 이자 절감 → 월 순수익 즉시 개선' },
+    { step:'02', color:'#E67E22', bg:'#FFF8E1', title:'구조 수술', desc:'원가율 분석 → 고마진 상품 강화 → 저마진 메뉴·서비스 정리. 목표 순이익률 18% 이상.', effect:'순이익률 '+c.marginRate+'% → 18% 달성 시 수익 대폭 개선' },
+    { step:'03', color:'#27AE60', bg:'#E8F5E9', title:'매출 엔진 이식', desc:'배달·온라인 채널 확대 + 단골 고객 리텐션 시스템 구축. 정부지원 마케팅 연계.', effect:'채널 다각화로 매출 30% 성장 시 수익 구조 완전 전환' },
+  ];
+  html += '<div class="solution-list">';
+  solutions.forEach(function(s) {
+    html += '<div class="solution-item" style="background:'+s.bg+';border-color:'+s.color+'">';
+    html += '<div class="solution-step" style="color:'+s.color+'">STEP '+s.step+'</div>';
+    html += '<div class="solution-title" style="color:'+s.color+'">'+s.title+'</div>';
+    html += '<p class="solution-desc">'+s.desc+'</p>';
+    html += '<div class="solution-effect" style="border-color:'+s.color+'44;color:'+s.color+'">기대 효과: '+s.effect+'</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // ── S5 다음 단계 ──
+  html += '<div id="r-s5" class="r-cta">';
+  html += '<div style="font-family:var(--mono);font-size:.58rem;color:#E8351A;margin-bottom:12px;letter-spacing:.18em;text-transform:uppercase">// NEXT STEP</div>';
+  html += '<h2 class="r-cta-title">당신의 숫자는 거짓말을 하지 않습니다.</h2>';
+  html += '<p class="r-cta-sub">이 자가진단은 구조를 파악하는 첫 번째 단계입니다.<br><strong>15만원 정밀 진단</strong>에서는 실제 통장 내역·세금계산서 기반으로 정책자금 신청서류를 직접 작성해드립니다.</p>';
+  html += '<div class="plan-grid">';
+  html += '<div class="plan-card red-top"><div class="plan-head"><div><div class="plan-name">15만원 플랜</div><div class="plan-sub">정밀 재무진단 · 자금진행계획서</div></div><div><div class="plan-price red">₩150,000</div><div class="plan-note">성공보수 없음</div></div></div>';
+  html += '<ul class="plan-items"><li><span style="color:#27AE60">✓</span>정밀 재무진단 보고서 (PDF+Word)</li><li><span style="color:#27AE60">✓</span>자금진행계획서 (기관별 맞춤)</li><li><span style="color:#27AE60">✓</span>적합 정책자금 전수 조사</li><li><span style="color:#27AE60">✓</span>48시간 내 납품</li></ul></div>';
+  html += '<div class="plan-card gold-top"><div class="plan-head"><div><div class="plan-name">30만원 플랜</div><div class="plan-sub">사업계획서 풀패키지</div></div><div><div class="plan-price gold">₩300,000</div><div class="plan-note">성공보수 없음</div></div></div>';
+  html += '<ul class="plan-items"><li><span style="color:#E67E22">▶</span>15만원 플랜 전체 포함</li><li><span style="color:#E67E22">▶</span>정책자금 심사용 사업계획서</li><li><span style="color:#E67E22">▶</span>5개년 재무모델 + Q&A 가이드</li><li><span style="color:#E67E22">▶</span>심사역 예상 질문 15문항</li></ul></div>';
+  html += '</div>';
+  html += '<a class="btn-kakao" href="https://pf.kakao.com/_BwKMX" target="_blank">💬 카카오톡으로 상담 신청하기</a>';
+  html += '<div class="r-cta-links"><span>pf.kakao.com/_BwKMX</span><span>blog.naver.com/spoonup_</span></div>';
+  html += '</div>';
+
+  return html;
+}
+</script>
+</body>
+</html>

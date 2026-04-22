@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소생컴퍼니 정밀 재무진단 보고서 | 홍길동 삼겹살</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --red:#C0392B; --redl:#FDECEA; --navy:#1A2744; --navyl:#EAF0FB; --gray:#F5F4F1; --grayb:#E0DEDA; --white:#FFFFFF; --dark:#1A1A1A; --yell:#FFF8E1; --yellb:#F9A825; --grenl:#E8F5E9; --gren:#1B5E20; --mono:'IBM Plex Mono',monospace; --sans:'Noto Sans KR','Apple SD Gothic Neo',sans-serif; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#EDEBE6;color:var(--dark);font-family:var(--sans);}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--red);}
+@keyframes barIn{from{width:0}}
+@media print{.no-print{display:none!important;}body{background:#fff;}.page-break{page-break-before:always;}}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(26,39,68,.97);border-bottom:1px solid #2a3a5a;height:46px;display:flex;align-items:center;padding:0 16px;gap:4px;overflow-x:auto;}
+#nav .brand{font-family:var(--mono);font-size:.58rem;color:var(--red);margin-right:14px;white-space:nowrap;letter-spacing:.1em;}
+#nav button{background:none;border:none;color:#556;font-size:.7rem;cursor:pointer;padding:4px 10px;white-space:nowrap;font-family:var(--sans);transition:color .2s;}
+#nav button:hover{color:var(--red);}
+.nav-right{margin-left:auto;display:flex;gap:6px;}
+.btn-pdf{background:#2a3a5a;color:#ccc;border:none;padding:5px 12px;font-size:.7rem;cursor:pointer;font-family:var(--sans);}
+
+/* COVER */
+.cover{background:var(--navy);color:#F0EBE0;padding:56px 48px;position:relative;overflow:hidden;min-height:55vh;display:flex;flex-direction:column;}
+.cover-ghost{position:absolute;bottom:-20px;right:-20px;font-size:clamp(80px,14vw,160px);font-weight:900;color:rgba(255,255,255,.04);letter-spacing:-.06em;user-select:none;line-height:1;}
+.cover-redbar{height:3px;background:var(--red);position:absolute;top:0;left:0;right:0;}
+.cover-top{margin-bottom:auto;}
+.mono-label{font-family:var(--mono);font-size:.62rem;color:var(--red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;}
+.cover-badge{display:inline-block;background:var(--red);color:#fff;padding:5px 14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;margin-bottom:18px;}
+.cover-h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:12px;}
+.cover-h1 span{color:var(--red);}
+.cover-desc{color:#556;font-size:.88rem;line-height:1.7;}
+.cover-meta{margin-top:40px;border-top:1px solid #2a3a5a;padding-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px 32px;}
+.cover-meta-item label{font-family:var(--mono);font-size:.57rem;color:#445;display:block;margin-bottom:3px;letter-spacing:.1em;}
+.cover-meta-item span{font-weight:700;font-size:.88rem;color:#F0EBE0;}
+.cover-meta-item .hi{color:#E67E22;}
+
+/* SECTION */
+.sec{padding:44px 32px;}
+.sec.alt{background:#fff;}
+.sec-label{font-family:var(--mono);font-size:.58rem;color:var(--red);margin-bottom:10px;letter-spacing:.18em;text-transform:uppercase;}
+.sec-h{font-weight:900;font-size:1.3rem;letter-spacing:-.02em;color:var(--navy);margin-bottom:6px;}
+.sec-sub{color:#888;font-size:.8rem;margin-bottom:24px;}
+
+/* KPI */
+.kpi-wrap{display:grid;grid-template-columns:160px 1fr;gap:14px;margin-bottom:20px;}
+.score-box{background:#fff;border:1px solid var(--grayb);padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;}
+.score-circle{width:88px;height:88px;border-radius:50%;border:5px solid #E67E22;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(230,126,34,.12);}
+.score-num{font-weight:900;font-size:1.9rem;color:#E67E22;font-family:var(--mono);line-height:1;}
+.score-denom{font-size:.58rem;color:#aaa;}
+.score-level{font-weight:900;color:#E67E22;}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kpi-card{background:#fff;border:1px solid var(--grayb);padding:14px 16px;}
+.kpi-icon{font-size:1rem;margin-bottom:7px;display:block;}
+.kpi-val{font-weight:900;font-size:1.4rem;font-family:var(--mono);letter-spacing:-.03em;line-height:1;}
+.kpi-name{font-weight:700;font-size:.76rem;color:#333;margin:5px 0 2px;}
+.kpi-sub{font-size:.65rem;color:#aaa;}
+
+/* ALERT CARD */
+.ac{border-left:4px solid;padding:16px 18px;margin-bottom:14px;}
+.ac.red{background:var(--redl);border-color:var(--red);}
+.ac.amb{background:var(--yell);border-color:var(--yellb);}
+.ac.grn{background:var(--grenl);border-color:var(--gren);}
+.ac.nvy{background:var(--navyl);border-color:var(--navy);}
+.ac-label{font-family:var(--mono);font-size:.58rem;color:var(--red);margin-bottom:10px;letter-spacing:.18em;text-transform:uppercase;}
+.ac-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:12px;}
+.ac-item{text-align:center;}
+.ac-item+.ac-item{border-left:1px solid rgba(0,0,0,.08);}
+.ac-big{font-weight:900;font-size:1.5rem;font-family:var(--mono);}
+.ac-name{font-size:.7rem;color:#666;margin-top:4px;}
+.ac-note{font-size:.62rem;color:#aaa;}
+.bar-wrap{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:10px;}
+.bar-fill{height:100%;border-radius:4px;animation:barIn 1.2s cubic-bezier(.4,0,.2,1) forwards;}
+.warn{font-size:.78rem;font-weight:700;margin-top:8px;}
+.runway-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:12px;}
+.runway-big{font-weight:900;font-size:2.4rem;font-family:var(--mono);}
+.runway-info{flex:1;min-width:180px;font-size:.83rem;color:#555;line-height:1.8;}
+.sav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#fff;border:1px solid var(--grayb);padding:12px 16px;text-align:center;}
+.sav-item+.sav-item{border-left:1px solid #f0f0f0;}
+.sav-val{font-weight:900;font-size:1.2rem;font-family:var(--mono);}
+.sav-lab{font-size:.65rem;color:#888;margin-top:3px;}
+
+/* SCORE TABLE */
+.st{border:1px solid var(--grayb);overflow:hidden;margin-bottom:24px;}
+.st-head{display:grid;grid-template-columns:2fr 1.2fr 2fr 1fr;background:var(--navy);}
+.st-head div{color:#fff;font-weight:700;font-size:.8rem;padding:10px 14px;border-right:1px solid #2a3a5a;}
+.st-head div:last-child{border-right:none;}
+.st-row{display:grid;grid-template-columns:2fr 1.2fr 2fr 1fr;border-top:1px solid var(--grayb);}
+.st-row div{padding:10px 14px;font-size:.83rem;border-right:1px solid var(--grayb);}
+.st-row div:last-child{border-right:none;font-family:var(--mono);font-weight:900;text-align:center;}
+.st-foot{display:grid;grid-template-columns:2fr 1.2fr 2fr 1fr;background:var(--red);border-top:2px solid #a93226;}
+.st-foot div{color:#fff;font-weight:900;padding:10px 14px;font-size:.88rem;border-right:1px solid #a93226;font-family:var(--mono);}
+.st-foot div:last-child{border-right:none;text-align:center;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.risk-list{display:flex;flex-direction:column;gap:10px;}
+.risk-item{border-left:3px solid;padding:14px 16px;background:#F7F5F0;}
+.risk-hd{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;}
+.tag{display:inline-block;padding:2px 8px;border-radius:2px;font-size:.7rem;font-weight:700;border:1px solid;white-space:nowrap;}
+.risk-t{font-weight:700;font-size:.85rem;}
+.risk-d{font-size:.78rem;color:#666;line-height:1.65;margin-bottom:6px;}
+.risk-a{font-size:.75rem;font-weight:700;color:var(--gren);}
+.str-list{display:flex;flex-direction:column;}
+.str-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F0EDE8;font-size:.83rem;color:#333;}
+.str-chk{color:var(--gren);font-weight:900;flex-shrink:0;}
+.cmnt{margin-top:12px;background:var(--navyl);border:1px solid #c8dcf0;padding:14px 16px;}
+.cmnt-t{font-weight:700;font-size:.82rem;color:var(--navy);margin-bottom:8px;}
+.cmnt-p{font-size:.8rem;color:#444;line-height:1.75;}
+
+/* FUNDING */
+.fund-list{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
+.fund-item{background:#fff;border-left:4px solid;padding:20px 22px;}
+.fund-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.fund-rank{width:26px;height:26px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;flex-shrink:0;}
+.fund-name{font-weight:900;font-size:.98rem;}
+.fund-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+.fund-mi{background:#F7F5F0;padding:8px 12px;border:1px solid var(--grayb);}
+.fund-ml{font-size:.62rem;color:#aaa;margin-bottom:3px;}
+.fund-mv{font-weight:700;font-size:.83rem;font-family:var(--mono);}
+.fund-why{font-size:.8rem;color:#666;line-height:1.65;margin-bottom:6px;}
+.fund-act{font-size:.78rem;font-weight:700;}
+.rm-wrap{background:#fff;border:1px solid var(--grayb);padding:20px;}
+.rm-row{display:grid;grid-template-columns:140px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid #F0EDE8;}
+.rm-row:last-child{border-bottom:none;}
+.rm-phase{font-weight:900;font-size:.85rem;padding-top:2px;}
+.rm-items{display:flex;flex-wrap:wrap;gap:8px;}
+.rm-chip{padding:5px 12px;font-size:.78rem;font-weight:600;border:1px solid;}
+
+/* SOLUTIONS */
+.sol-list{display:flex;flex-direction:column;gap:14px;}
+.sol-item{border-left:4px solid;padding:22px 24px;}
+.sol-step{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;margin-bottom:4px;}
+.sol-t{font-weight:900;font-size:1.05rem;margin-bottom:10px;}
+.sol-d{font-size:.85rem;color:#555;line-height:1.7;margin-bottom:10px;}
+.sol-e{display:inline-block;background:#fff;padding:6px 14px;font-size:.8rem;font-weight:700;border:1px solid;}
+
+/* CTA */
+.cta{background:var(--navy);color:#F0EBE0;padding:52px 32px;}
+.cta-h{font-weight:900;font-size:1.3rem;letter-spacing:-.02em;margin-bottom:8px;}
+.cta-p{color:#556;font-size:.85rem;line-height:1.85;margin-bottom:32px;word-break:keep-all;}
+.cta-p strong{color:#F0EBE0;}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.plan-card{background:#1e2e50;border:1px solid #2a3a5a;padding:24px 20px;}
+.plan-card.rt{border-top:3px solid var(--red);}
+.plan-card.gt{border-top:3px solid #E67E22;}
+.plan-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.plan-name{font-weight:900;font-size:1rem;margin-bottom:3px;}
+.plan-sub{color:#445;font-size:.75rem;}
+.plan-price{font-weight:900;font-size:1.5rem;font-family:var(--mono);}
+.plan-note{font-size:.62rem;color:#445;}
+.plan-items li{display:flex;gap:8px;font-size:.8rem;color:#aabbcc;margin-bottom:7px;list-style:none;}
+.btn-kakao{display:block;text-align:center;background:#FEE500;color:#3A1D1D;padding:17px;font-weight:900;font-size:1rem;text-decoration:none;letter-spacing:.02em;margin-bottom:12px;}
+.cta-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
+.cta-links span{font-family:var(--mono);font-size:.6rem;color:#334;}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .kpi-wrap,.two-col,.plan-grid{grid-template-columns:1fr;}
+  .fund-meta{grid-template-columns:1fr 1fr;}
+  .ac-3{grid-template-columns:1fr;}
+  .st-head,.st-row,.st-foot{grid-template-columns:1.5fr 1fr 1.5fr 1fr;}
+  .cover,.sec{padding:36px 20px;}
+  .rm-row{grid-template-columns:1fr;gap:8px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav" class="no-print">
+  <span class="brand">소생컴퍼니</span>
+  <span style="font-family:var(--mono);font-size:.65rem;color:#445;margin-right:12px;white-space:nowrap">홍길동 삼겹살</span>
+  <button onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">01 핵심지표</button>
+  <button onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth'})">02 소생지수</button>
+  <button onclick="document.getElementById('s3').scrollIntoView({behavior:'smooth'})">03 자금계획</button>
+  <button onclick="document.getElementById('s4').scrollIntoView({behavior:'smooth'})">04 처방전</button>
+  <button onclick="document.getElementById('s5').scrollIntoView({behavior:'smooth'})">05 다음단계</button>
+  <div class="nav-right">
+    <button class="btn-pdf" onclick="window.print()">🖨 PDF 저장</button>
+  </div>
+</nav>
+
+<div style="padding-top:46px">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-ghost">REPORT</div>
+  <div class="cover-redbar"></div>
+  <div class="cover-top">
+    <div style="font-family:var(--mono);font-size:.62rem;color:var(--red);margin-bottom:6px;letter-spacing:.18em">소생컴퍼니 · 사장님 생존 연구소</div>
+    <div style="font-family:var(--mono);font-size:.58rem;color:#445">pf.kakao.com/_BwKMX</div>
+  </div>
+  <div style="margin:48px 0 32px">
+    <div class="cover-badge">정밀 재무진단 보고서 · 15만원 플랜</div>
+    <h1 class="cover-h1">사장님 생존 진단<br><span>정밀 분석 보고서</span></h1>
+    <p class="cover-desc">감성은 공감하지만, 분석은 이성적으로.<br>당신의 숫자를 직면하고, 사업을 소생시킵니다.</p>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><label>의뢰인</label><span>홍길동 삼겹살 (대표: 홍길동)</span></div>
+    <div class="cover-meta-item"><label>업종</label><span>음식업 (한식 / 삼겹살 전문점)</span></div>
+    <div class="cover-meta-item"><label>보고서 번호</label><span>SOS-2026-00422</span></div>
+    <div class="cover-meta-item"><label>발행일</label><span>2026. 04. 22</span></div>
+    <div class="cover-meta-item"><label>소생 지수</label><span class="hi">59점 / 100점 (⚠️ 주의)</span></div>
+    <div class="cover-meta-item"><label>유형</label><span>A유형 · 생계형</span></div>
+  </div>
+</div>
+
+<!-- S1 핵심지표 -->
+<div id="s1" class="sec">
+  <div class="sec-label">SECTION 01 · FACT BOMBING</div>
+  <div class="sec-h">팩트 폭격 — 핵심 재무 지표</div>
+  <div class="sec-sub">감정을 제거하고 숫자만 직면합니다.</div>
+
+  <div class="kpi-wrap">
+    <div class="score-box">
+      <div style="font-family:var(--mono);font-size:.58rem;color:var(--red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px">소생 지수</div>
+      <div class="score-circle"><div class="score-num">59</div><div class="score-denom">/ 100</div></div>
+      <div class="score-level">⚠️ 주의</div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><span class="kpi-icon">⏱</span><div class="kpi-val" style="color:#C0392B">10,000원/h</div><div class="kpi-name">실질 시급</div><div class="kpi-sub">최저임금 대비 99.7%</div></div>
+      <div class="kpi-card"><span class="kpi-icon">🔐</span><div class="kpi-val" style="color:#E67E22">87일</div><div class="kpi-name">자금 런웨이</div><div class="kpi-sub">비상금 기준 버틸 수 있는 시간</div></div>
+      <div class="kpi-card"><span class="kpi-icon">🏗</span><div class="kpi-val" style="color:#27AE60">2.2년</div><div class="kpi-name">투자 회수</div><div class="kpi-sub">현 수익 기준 ROI</div></div>
+      <div class="kpi-card"><span class="kpi-icon">📊</span><div class="kpi-val" style="color:#C0392B">10.0%</div><div class="kpi-name">순이익률</div><div class="kpi-sub">매출 대비 실수령 비율</div></div>
+    </div>
+  </div>
+
+  <div class="ac red">
+    <div class="ac-label">REAL HOURLY WAGE — 실질 시급 vs 최저임금</div>
+    <div class="ac-3">
+      <div class="ac-item"><div class="ac-big" style="color:#C0392B">10,000원</div><div class="ac-name">홍길동 대표 실질 시급</div><div class="ac-note">300만원 ÷ 300h</div></div>
+      <div class="ac-item"><div class="ac-big" style="color:#333">10,030원</div><div class="ac-name">2024 법정 최저임금</div></div>
+      <div class="ac-item"><div class="ac-big" style="color:#C0392B">99.7%</div><div class="ac-name">최저임금 대비</div><span class="tag" style="color:#C0392B;border-color:#C0392B44;background:#C0392B18">최저임금 미달</span></div>
+    </div>
+    <div class="bar-wrap"><div class="bar-fill" style="background:#C0392B;width:49.85%"></div></div>
+    <p class="warn" style="color:#C0392B">⚠ 월 300시간 노동에도 최저임금 미달. 직원 한 명 고용 비용도 못 버는 구조입니다.</p>
+  </div>
+
+  <div class="ac amb">
+    <div class="ac-label">CASH RUNWAY — 자금 데드라인</div>
+    <div class="runway-row">
+      <div><div class="runway-big" style="color:#E67E22">87일</div><div style="font-size:.72rem;color:#666">현금 소진 예상 기간</div></div>
+      <div class="runway-info">
+        <div>보유 현금: <strong>3,500만원</strong></div>
+        <div>월 고정비: <strong>1,200만원</strong></div>
+        <div style="color:#27AE60;font-weight:700;margin-top:4px">✔ 87일 안전 — 단, 설비 고장·계절 하락 시 즉시 위험 진입</div>
+      </div>
+    </div>
+    <div class="sav-grid">
+      <div class="sav-item"><div class="sav-val" style="color:#C0392B">1,650만원</div><div class="sav-lab">현재 연 이자비용</div></div>
+      <div class="sav-item"><div class="sav-val" style="color:#27AE60">600만원</div><div class="sav-lab">정책금리(4%) 대환 후</div></div>
+      <div class="sav-item"><div class="sav-val" style="color:#27AE60">1,050만원</div><div class="sav-lab">연간 절감 가능</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 소생지수 -->
+<div id="s2" class="sec alt">
+  <div class="sec-label">SECTION 02 · SURVIVAL SCORE</div>
+  <div class="sec-h">소생 지수 & 사업 구조 진단</div>
+  <div class="sec-sub">4개 항목 기준, 100점 만점 산출</div>
+
+  <div class="st">
+    <div class="st-head"><div>평가 항목</div><div>측정값</div><div>기준 / 판정</div><div>감점</div></div>
+    <div class="st-row" style="background:#FDECEA"><div style="font-weight:700">실질 시급</div><div style="font-weight:900;color:#C0392B;font-family:var(--mono)">10,000원</div><div>최저임금 미달 → -30점</div><div style="color:#C0392B">-30점</div></div>
+    <div class="st-row" style="background:#FFF8E1"><div style="font-weight:700">순이익률</div><div style="font-weight:900;color:#E67E22;font-family:var(--mono)">10.0%</div><div>10~20% 구간 → -11점</div><div style="color:#E67E22">-11점</div></div>
+    <div class="st-row" style="background:#E8F5E9"><div style="font-weight:700">자금 런웨이</div><div style="font-weight:900;color:#27AE60;font-family:var(--mono)">87일</div><div>60일 이상 — 감점 없음</div><div style="color:#27AE60">0점</div></div>
+    <div class="st-row" style="background:#E8F5E9"><div style="font-weight:700">투자 회수 기간</div><div style="font-weight:900;color:#27AE60;font-family:var(--mono)">2.2년</div><div>5년 이내 — 감점 없음</div><div style="color:#27AE60">0점</div></div>
+    <div class="st-foot"><div>소생 지수 합계</div><div>59점</div><div>⚠️ 주의 구간 (40~69점)</div><div>−41점</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div style="font-weight:900;font-size:.88rem;color:#C0392B;margin-bottom:12px">🔴 리스크 요인</div>
+      <div class="risk-list">
+        <div class="risk-item" style="border-color:#C0392B"><div class="risk-hd"><span class="tag" style="color:#C0392B;border-color:#C0392B44;background:#C0392B18">위험</span><span class="risk-t">고금리 부채 과다</span></div><p class="risk-d">부채 1억 5,000만원, 연 이자 1,650만원. 월 순수익의 46%가 이자로 소진.</p><div class="risk-a">→ 소진공 경영안정자금으로 즉시 대환</div></div>
+        <div class="risk-item" style="border-color:#E67E22"><div class="risk-hd"><span class="tag" style="color:#E67E22;border-color:#E67E2244;background:#E67E2218">위험</span><span class="risk-t">실질 시급 최저임금 미달</span></div><p class="risk-d">월 300시간 노동, 실수령 300만원. 시급 10,000원으로 최저임금(10,030원) 미달.</p><div class="risk-a">→ 메뉴 원가율 재설계 + 고마진 메뉴 비중 확대</div></div>
+        <div class="risk-item" style="border-color:#1A2744"><div class="risk-hd"><span class="tag" style="color:#1A2744;border-color:#1A274444;background:#1A274418">주의</span><span class="risk-t">순이익률 10% 경계선</span></div><p class="risk-d">음식업 평균 순이익률 15~20% 대비 낮음. 재료비·인건비 구조 점검 필요.</p><div class="risk-a">→ 원가율 분석 및 메뉴 조정으로 목표 18% 달성</div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:900;font-size:.88rem;color:#27AE60;margin-bottom:12px">🟢 강점 요인</div>
+      <div class="str-list" style="background:#fff;border:1px solid var(--grayb);padding:0 16px">
+        <div class="str-item"><span class="str-chk">✓</span>투자금 회수 기간 2.2년 — 음식업 평균(5년) 대비 우수</div>
+        <div class="str-item"><span class="str-chk">✓</span>보유 현금 3,500만원 — 87일 런웨이, 급박한 위기 아님</div>
+        <div class="str-item"><span class="str-chk">✓</span>세금 체납 없음 — 정책자금 신청 필수 요건 충족</div>
+        <div class="str-item"><span class="str-chk">✓</span>현금 매출 발생 → 실제 매출 증빙 가능</div>
+        <div class="str-item" style="border-bottom:none"><span class="str-chk">✓</span>업력 기반 고정 고객 — 지속 운영 가능성 입증</div>
+      </div>
+      <div class="cmnt"><div class="cmnt-t">📌 컨설턴트 총평</div><p class="cmnt-p">투자 회수 기간(2.2년)과 현금 보유(3,500만원)는 안정적입니다. 그러나 고금리 부채 1억 5,000만원이 수익을 잠식하고 있으며, 최저임금 미달 시급은 즉각적인 구조 개선 신호입니다. 소진공 대환 후 원가 재설계에 집중하면 6개월 내 순이익률 15% 달성이 가능합니다.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 자금계획 -->
+<div id="s3" class="sec">
+  <div class="sec-label">SECTION 03 · FUNDING PLAN</div>
+  <div class="sec-h">정책자금 수혈 계획 (자금진행계획서)</div>
+  <div class="sec-sub">수혜 가능 자금 분석 · 신청 우선순위 · 조달 타임라인</div>
+
+  <div class="fund-list">
+    <div class="fund-item" style="border-color:#27AE60">
+      <div class="fund-hd"><div class="fund-rank">1</div><span class="fund-name">소진공 일반경영안정자금</span><span class="tag" style="color:#27AE60;border-color:#27AE6044;background:#27AE6018">승인 가능성 70%</span><span class="tag" style="color:#C0392B;border-color:#C0392B44;background:#C0392B18">즉시 신청</span></div>
+      <div class="fund-meta">
+        <div class="fund-mi"><div class="fund-ml">기관</div><div class="fund-mv">소상공인시장진흥공단</div></div>
+        <div class="fund-mi"><div class="fund-ml">한도</div><div class="fund-mv">2,000만원</div></div>
+        <div class="fund-mi"><div class="fund-ml">금리</div><div class="fund-mv">정책 2~4%</div></div>
+        <div class="fund-mi"><div class="fund-ml">기간</div><div class="fund-mv">5년</div></div>
+      </div>
+      <p class="fund-why">음식업 업종 제한 없음. 소상공인 기준 충족. 세금 체납 없어 신청 요건 완비.</p>
+      <div class="fund-act" style="color:#27AE60">→ ACTION: ☎ 1357 전화상담 → 신청서 접수</div>
+    </div>
+    <div class="fund-item" style="border-color:#E67E22">
+      <div class="fund-hd"><div class="fund-rank">2</div><span class="fund-name">서울신보재단 보증부 대출</span><span class="tag" style="color:#E67E22;border-color:#E67E2244;background:#E67E2218">승인 가능성 60%</span><span class="tag" style="color:#C0392B;border-color:#C0392B44;background:#C0392B18">즉시 신청</span></div>
+      <div class="fund-meta">
+        <div class="fund-mi"><div class="fund-ml">기관</div><div class="fund-mv">서울신용보증재단</div></div>
+        <div class="fund-mi"><div class="fund-ml">한도</div><div class="fund-mv">3,000만원</div></div>
+        <div class="fund-mi"><div class="fund-ml">금리</div><div class="fund-mv">4~5%</div></div>
+        <div class="fund-mi"><div class="fund-ml">기간</div><div class="fund-mv">3~5년</div></div>
+      </div>
+      <p class="fund-why">소진공과 중복 신청 가능. 보증재단 연계로 최대 3,000만원 조달. 신용점수 무관.</p>
+      <div class="fund-act" style="color:#E67E22">→ ACTION: 서울신보재단 방문 ☎ 1577-6119</div>
+    </div>
+    <div class="fund-item" style="border-color:#1A2744">
+      <div class="fund-hd"><div class="fund-rank">3</div><span class="fund-name">기보 기술보증 (업력 후)</span><span class="tag" style="color:#1A2744;border-color:#1A274444;background:#1A274418">승인 가능성 50%</span><span class="tag" style="color:#1A2744;border-color:#1A274444;background:#1A274418">업력 3년+</span></div>
+      <div class="fund-meta">
+        <div class="fund-mi"><div class="fund-ml">기관</div><div class="fund-mv">기술보증기금</div></div>
+        <div class="fund-mi"><div class="fund-ml">한도</div><div class="fund-mv">5,000만원</div></div>
+        <div class="fund-mi"><div class="fund-ml">금리</div><div class="fund-mv">3~5%</div></div>
+        <div class="fund-mi"><div class="fund-ml">기간</div><div class="fund-mv">5년</div></div>
+      </div>
+      <p class="fund-why">업력 요건 충족 후 신청 가능. 지금부터 매출·성장 이력 관리 필요.</p>
+      <div class="fund-act" style="color:#1A2744">→ ACTION: 업력 3년 도달 후 기보 상담 예약</div>
+    </div>
+  </div>
+
+  <div class="rm-wrap">
+    <div style="font-family:var(--mono);font-size:.58rem;color:var(--red);margin-bottom:16px;letter-spacing:.18em;text-transform:uppercase">FUNDING ROADMAP — 조달 타임라인</div>
+    <div class="rm-row"><div class="rm-phase" style="color:#C0392B">즉시 (4월)</div><div class="rm-items"><div class="rm-chip" style="background:#FDECEA;border-color:#C0392B44;color:#C0392B">소진공 경영안정자금 신청 (☎ 1357)</div><div class="rm-chip" style="background:#FDECEA;border-color:#C0392B44;color:#C0392B">서울신보재단 보증 상담 예약</div><div class="rm-chip" style="background:#FDECEA;border-color:#C0392B44;color:#C0392B">공통 서류 준비</div></div></div>
+    <div class="rm-row"><div class="rm-phase" style="color:#E67E22">1개월 후 (5월)</div><div class="rm-items"><div class="rm-chip" style="background:#FFF8E1;border-color:#E67E2244;color:#E67E22">고금리 대출 즉시 대환</div><div class="rm-chip" style="background:#FFF8E1;border-color:#E67E2244;color:#E67E22">이자 절감분 재확인</div><div class="rm-chip" style="background:#FFF8E1;border-color:#E67E2244;color:#E67E22">원가율 분석 착수</div></div></div>
+    <div class="rm-row"><div class="rm-phase" style="color:#1A2744">6개월 후 (10월)</div><div class="rm-items"><div class="rm-chip" style="background:#EAF0FB;border-color:#1A274444;color:#1A2744">신용점수 개선 확인</div><div class="rm-chip" style="background:#EAF0FB;border-color:#1A274444;color:#1A2744">추가 운전자금 검토</div><div class="rm-chip" style="background:#EAF0FB;border-color:#1A274444;color:#1A2744">기보 준비</div></div></div>
+  </div>
+</div>
+
+<!-- S4 처방전 -->
+<div id="s4" class="sec alt">
+  <div class="sec-label">SECTION 04 · SOLUTION</div>
+  <div class="sec-h">소생을 위한 3단계 처방전</div>
+  <div class="sec-sub">숫자가 가리키는 방향으로만 움직입니다.</div>
+  <div class="sol-list">
+    <div class="sol-item" style="background:#FDECEA;border-color:#C0392B"><div class="sol-step" style="color:#C0392B">STEP 01</div><div class="sol-t" style="color:#C0392B">정책자금 수혈</div><p class="sol-d">소진공·서울신보 정책자금으로 고금리 부채 즉시 대환. 성공보수 없이 맞춤 상품 매칭.</p><div class="sol-e" style="border-color:#C0392B44;color:#C0392B">기대 효과: 연 1,050만원 이자 절감 → 월 실수령 +87만원</div></div>
+    <div class="sol-item" style="background:#FFF8E1;border-color:#E67E22"><div class="sol-step" style="color:#E67E22">STEP 02</div><div class="sol-t" style="color:#E67E22">구조 수술</div><p class="sol-d">메뉴별 원가율 분석 → 고마진 메뉴 강화 → 저마진 메뉴 정리. 목표 순이익률 18% 이상.</p><div class="sol-e" style="border-color:#E67E2244;color:#E67E22">기대 효과: 순이익률 10%→18% 달성 시 월 순수익 +240만원</div></div>
+    <div class="sol-item" style="background:#E8F5E9;border-color:#27AE60"><div class="sol-step" style="color:#27AE60">STEP 03</div><div class="sol-t" style="color:#27AE60">매출 엔진 이식</div><p class="sol-d">배달앱 프로모션·단골 고객 리텐션 구축. 정부지원 온라인 판로 확대 병행.</p><div class="sol-e" style="border-color:#27AE6044;color:#27AE60">기대 효과: 월 매출 3,000→4,000만원 달성 시 순수익 720만원 (+140%)</div></div>
+  </div>
+</div>
+
+<!-- S5 CTA -->
+<div id="s5" class="cta">
+  <div style="font-family:var(--mono);font-size:.58rem;color:var(--red);margin-bottom:12px;letter-spacing:.18em;text-transform:uppercase">// NEXT STEP</div>
+  <h2 class="cta-h">당신의 숫자는 거짓말을 하지 않습니다.</h2>
+  <p class="cta-p">이 보고서는 재무 구조를 진단하고 자금 조달 방향을 제시했습니다.<br><strong>15만원 정밀 진단</strong>에서는 실제 통장 내역·세금계산서 기반으로 정책자금 신청서류를 직접 작성해드립니다.</p>
+  <div class="plan-grid">
+    <div class="plan-card rt">
+      <div class="plan-hd"><div><div class="plan-name">15만원 플랜</div><div class="plan-sub">정밀 재무진단 · 자금진행계획서</div></div><div><div class="plan-price" style="color:var(--red)">₩150,000</div><div class="plan-note">성공보수 없음</div></div></div>
+      <ul class="plan-items"><li><span style="color:#27AE60">✓</span>정밀 재무진단 보고서 (PDF+Word)</li><li><span style="color:#27AE60">✓</span>자금진행계획서 (기관별 맞춤)</li><li><span style="color:#27AE60">✓</span>적합 정책자금 전수 조사</li><li><span style="color:#27AE60">✓</span>48시간 내 납품</li></ul>
+    </div>
+    <div class="plan-card gt">
+      <div class="plan-hd"><div><div class="plan-name">30만원 플랜</div><div class="plan-sub">사업계획서 풀패키지</div></div><div><div class="plan-price" style="color:#E67E22">₩300,000</div><div class="plan-note">성공보수 없음</div></div></div>
+      <ul class="plan-items"><li><span style="color:#E67E22">▶</span>15만원 플랜 전체 포함</li><li><span style="color:#E67E22">▶</span>정책자금 심사용 사업계획서</li><li><span style="color:#E67E22">▶</span>5개년 재무모델 + Q&A 가이드</li><li><span style="color:#E67E22">▶</span>심사역 예상 질문 15문항</li></ul>
+    </div>
+  </div>
+  <a class="btn-kakao" href="https://pf.kakao.com/_BwKMX" target="_blank">💬 카카오톡으로 상담 신청하기</a>
+  <div class="cta-links"><span>pf.kakao.com/_BwKMX</span><span>blog.naver.com/spoonup_</span></div>
+</div>
+
+</div><!-- /padding-top -->
+</body>
+</html>
